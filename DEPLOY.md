@@ -39,6 +39,14 @@ cd dist && npx vercel --prod
 
 Сначала создайте на github.com пустой репозиторий — **без** галочек «Add a README» и «Add .gitignore», иначе при первом пуше будет конфликт.
 
+Если git на этой машине ещё ни разу не использовался, представьтесь ему — иначе `git commit` откажется работать:
+
+```bash
+git config --global user.name "doxa-tells"
+git config --global user.email "почта_от_github@example.com"
+git config --global credential.helper osxkeychain
+```
+
 Дальше в Терминале:
 
 ```bash
@@ -47,7 +55,7 @@ cd ~/Documents/Claude/Projects/Kye_room/dist
 git init -b main
 git add .
 git commit -m "KYE ROOM — сайт со скролл-анимацией"
-git remote add origin https://github.com/ВАШ_ЛОГИН/kye-room.git
+git remote add origin https://github.com/doxa-tells/kye-room.git
 git push -u origin main
 ```
 
@@ -75,7 +83,7 @@ git config --global credential.helper osxkeychain
 
 ### Включить GitHub Pages
 
-В репозитории: **Settings → Pages → Source: Deploy from a branch → Branch: main → / (root) → Save**. Через минуту сайт откроется на `https://ВАШ_ЛОГИН.github.io/kye-room/`.
+В репозитории: **Settings → Pages → Source: Deploy from a branch → Branch: main → / (root) → Save**. Через минуту сайт откроется на `https://doxa-tells.github.io/kye-room/`.
 
 Файл `.nojekyll` в папке уже лежит — без него GitHub Pages выбросил бы `_headers` (Jekyll игнорирует всё, что начинается с подчёркивания).
 
