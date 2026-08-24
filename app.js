@@ -73,7 +73,6 @@
 
       // текстовая колонка
       var txt = el("div", "st-text");
-      txt.appendChild(el("div", "eyebrow rv", L.eyebrow));
       txt.appendChild(el("h2", "rv", L.title));
       txt.appendChild(el("p", "lead rv", L.body));
       var a = el("a", "st-cta rv",
@@ -90,15 +89,13 @@
 
   function renderContact() {
     var c = K.contact;
-    var rows = [
-      [t("c_phone"), '<a href="tel:' + c.tel + '">' + c.phone + "</a>"],
-      [t("c_inst"), '<a href="' + c.instagram_url + '" target="_blank" rel="noopener">' + c.instagram + "</a>"],
-      [t("c_show"), "<p>" + t("c_show_v") + "</p>"],
-      [t("c_ship"), "<p>" + t("c_ship_v") + "</p>"]
-    ];
-    $("#cInfo").innerHTML = rows.map(function (r) {
-      return '<div class="info-row"><small>' + r[0] + "</small>" + r[1] + "</div>";
-    }).join("");
+    // без подписей: телефон и ник говорят сами за себя,
+    // а строки про шоурум и доставку названы прямо внутри текста
+    $("#cInfo").innerHTML =
+      '<div class="info-row lead-row"><a href="tel:' + c.tel + '">' + c.phone + "</a></div>" +
+      '<div class="info-row lead-row"><a href="' + c.instagram_url + '" target="_blank" rel="noopener">' + c.instagram + "</a></div>" +
+      '<div class="info-row"><p>' + t("c_show_v") + "</p></div>" +
+      '<div class="info-row"><p>' + t("c_ship_v") + "</p></div>";
   }
 
   function applyLang() {

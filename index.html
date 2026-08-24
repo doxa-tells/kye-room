@@ -185,7 +185,7 @@ h2 em{font-style:italic;color:var(--sand)}
   font-size:clamp(26px,3.3vw,48px);line-height:1.1;
   margin-bottom:clamp(14px,1.8vh,22px);
 }
-.st-text .lead{max-width:44ch;font-size:clamp(13.5px,1vw,15px);line-height:1.66}
+.st-text .lead{max-width:42ch;font-size:clamp(14.5px,1.16vw,17.5px);line-height:1.66}
 .st-cta{
   display:inline-flex;align-items:center;gap:13px;margin-top:clamp(16px,2.1vh,26px);
   border:1px solid var(--line);border-radius:999px;padding:7px 7px 7px 22px;
@@ -296,11 +296,14 @@ form{display:flex;flex-direction:column;gap:26px;margin-top:40px}
 }
 .btn:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .ok{font-size:13px;color:var(--sand);display:none}
-.info-row{padding:19px 0;border-bottom:1px solid var(--line)}
+.info-row{padding:17px 0;border-bottom:1px solid var(--line)}
 .info-row:last-child{border-bottom:0}
-.info-row small{display:block;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:8px}
-.info-row a,.info-row p{font-family:var(--display);font-size:18px;font-weight:300;letter-spacing:.01em;transition:color .35s}
+.info-row a{
+  font-family:var(--display);font-size:clamp(20px,1.7vw,26px);font-weight:300;
+  letter-spacing:.02em;transition:color .35s;
+}
 .info-row a:hover{color:var(--sand)}
+.info-row p{font-size:14.5px;line-height:1.6;color:var(--dim)}
 footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,236,226,.32)}
 
@@ -488,8 +491,8 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 
 <section id="story">
   <div class="wrap story-in">
-    <div class="story-row" id="storyRow0"></div>
-    <div class="story-row rev" id="storyRow1"></div>
+    <div class="story-row rev" id="storyRow0"></div>
+    <div class="story-row" id="storyRow1"></div>
   </div>
 </section>
 
@@ -497,7 +500,6 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
   <div class="wrap">
     <div class="cat-head rv">
       <div>
-        <div class="eyebrow" data-t="nav_catalog">Каталог</div>
         <h2 data-t="catalog_title">Каталог</h2>
       </div>
       <p class="lead" style="max-width:32ch" data-t="catalog_note">Шестнадцать позиций.</p>
@@ -509,7 +511,6 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 <section id="contact">
   <div class="wrap contact-grid">
     <div>
-      <div class="eyebrow rv" data-t="nav_contact">Контакты</div>
       <h2 class="rv" id="contactH">Соберём вашу<br><em>кровать</em></h2>
       <form class="rv" id="f">
         <div class="field"><input type="text" id="fn" placeholder=" " required><label for="fn" data-t="form_name">Имя</label></div>

@@ -22,9 +22,8 @@ window.KYE = {
       photo_hint: "Место под фото<br>основателей за работой",
       form_name: "Имя", form_phone: "Телефон", form_msg: "Модель, размер, ткань",
       form_send: "Отправить", form_ok: "Спасибо. Мы свяжемся с вами в течение дня.",
-      c_phone: "Телефон", c_inst: "Instagram", c_show: "Шоурум", c_ship: "Доставка",
-      c_show_v: "По записи · ежедневно 11:00 — 20:00",
-      c_ship_v: "Казахстан и СНГ · сборка на месте"
+      c_show_v: "Шоурум по записи · ежедневно 11:00 — 20:00",
+      c_ship_v: "Доставка по Казахстану и СНГ · сборка на месте"
     },
     en: {
       nav_about: "Brand", nav_craft: "Craft", nav_catalog: "Catalogue", nav_contact: "Contact",
@@ -43,9 +42,8 @@ window.KYE = {
       photo_hint: "Photo slot<br>founders at work",
       form_name: "Name", form_phone: "Phone", form_msg: "Model, size, fabric",
       form_send: "Send", form_ok: "Thank you. We will be in touch within a day.",
-      c_phone: "Phone", c_inst: "Instagram", c_show: "Showroom", c_ship: "Delivery",
-      c_show_v: "By appointment · daily 11:00 — 20:00",
-      c_ship_v: "Kazakhstan and CIS · assembled on site"
+      c_show_v: "Showroom by appointment · daily 11:00 — 20:00",
+      c_ship_v: "Delivery across Kazakhstan and the CIS · assembled on site"
     }
   },
 
@@ -61,14 +59,14 @@ window.KYE = {
       cta: "#catalog",
       ru: {
         eyebrow: "Бренд",
-        title: "Не просто мебель —<br><em>произведение искусства</em>",
-        body: "KYE ROOM не выпускает партии. Каждая кровать рождается в единственном экземпляре: под размер комнаты, под характер света, под привычку хозяина просыпаться на правом боку. Мы делаем предметы, которые остаются в доме дольше, чем ремонт вокруг них.",
+        title: "Не просто мебель<br><em>произведение искусства</em>",
+        body: "KYE ROOM не выпускает партии. Каждая кровать рождается в единственном экземпляре: под размер комнаты, под характер света, под привычку хозяина. Такие вещи остаются в доме дольше, чем ремонт вокруг них.",
         cta: "Смотреть каталог"
       },
       en: {
         eyebrow: "Brand",
-        title: "Not furniture —<br><em>a work of art</em>",
-        body: "KYE ROOM does not run batches. Every bed is made once: to the size of the room, to the character of its light, to the habit of sleeping on your right side. We build pieces that outlast the renovation around them.",
+        title: "Not furniture<br><em>a work of art</em>",
+        body: "KYE ROOM does not run batches. Every bed is made once: to the size of the room, to the character of its light, to the habits of the person sleeping in it. Pieces like these outlast the renovation around them.",
         cta: "See the catalogue"
       }
     },
@@ -78,20 +76,20 @@ window.KYE = {
       cta: "#contact",
       ru: {
         eyebrow: "Производство",
-        title: "Ткани из Европы,<br><em>каркас на ЧПУ</em>",
-        body: "Англия, Франция, Италия, Бельгия и лучшие турецкие мануфактуры. Только натуральный состав — лён и хлопок, высокая прочность и благородная фактура. Каркас режется на ЧПУ-станке с точностью до десятой миллиметра, обивку от первого шва до последнего ведёт один мастер. Устойчивость тканей к истиранию — от 40 000 циклов Мартиндейла, гарантия на конструкцию — пять лет.",
+        title: "Ткани из Европы<br><em>каркас на ЧПУ</em>",
+        body: "Англия, Франция, Италия, Бельгия и лучшие турецкие мануфактуры. Только лён и хлопок: прочность и благородная фактура. Каркас режется на ЧПУ с точностью до десятой миллиметра, обивку от первого шва до последнего ведёт один мастер. Ткани держат от 40 000 циклов Мартиндейла, на конструкцию — пять лет гарантии.",
         cta: "Оставить заявку"
       },
       en: {
         eyebrow: "Craft",
-        title: "European cloth,<br><em>CNC-cut frame</em>",
-        body: "England, France, Italy, Belgium and the best Turkish mills. Natural fibres only — linen and cotton, high tensile strength and a noble hand. The frame is cut on a CNC machine to a tenth of a millimetre, and one craftsman carries the upholstery from the first seam to the last. Abrasion resistance from 40,000 Martindale cycles, five-year structural warranty.",
+        title: "European cloth<br><em>CNC-cut frame</em>",
+        body: "England, France, Italy, Belgium and the best Turkish mills. Linen and cotton only: strength and a noble hand. The frame is CNC-cut to a tenth of a millimetre, and one craftsman carries the upholstery from first seam to last. Fabrics hold from 40,000 Martindale cycles, five years of structural warranty.",
         cta: "Make an enquiry"
       }
     }
   ],
 
-  contact: { phone: "+7 702 199 09 95", tel: "+77021990995", instagram: "KYE.ROOM", instagram_url: "https://instagram.com/kye.room" },
+  contact: { phone: "+7 702 199 09 95", tel: "+77021990995", instagram: "@kye.room", instagram_url: "https://instagram.com/kye.room" },
 
   /* ---------- МОДЕЛИ: общее описание и прайс ---------- */
   models: {
