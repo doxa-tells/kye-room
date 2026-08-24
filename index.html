@@ -167,7 +167,9 @@ h2 em{font-style:italic;color:var(--sand)}
 @media(max-width:1040px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
 .cell{
-  position:relative;aspect-ratio:4/3;overflow:hidden;
+  /* пропорция берётся от сцены карточки — тогда перелёт идёт чистым
+     масштабом, без смены кадрирования и рывка в первый момент */
+  position:relative;aspect-ratio:var(--cell-ar,4/3);overflow:hidden;
   background:var(--bg-2);cursor:pointer;
 }
 .cell img{

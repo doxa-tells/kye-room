@@ -110,6 +110,15 @@
 
   /* ---------------- GRID ---------------- */
   var grid = $("#grid");
+
+  /* Плитка должна повторять пропорцию сцены карточки: тогда клон летит
+     чистым равномерным масштабом и кадрирование не меняется по дороге. */
+  function syncCellAspect() {
+    var r = stage.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) {
+      document.documentElement.style.setProperty("--cell-ar", r.width + " / " + r.height);
+    }
+  }
   /* держим декодированные кадры в кэше: клик не должен упираться в распаковку webp */
   var warmCache = {};
   function warmUp(id) {
@@ -393,7 +402,7 @@
 
     $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
     var img = $("img", cell);
-    var from = cell.getBoundingClientRect();
+    var from = img.getBoundingClientRect();
 
     buildShots(id); renderPanel(id); syncNav();
 
@@ -471,7 +480,7 @@
       document.documentElement.classList.remove("lock");
 
       // rect плитки меряем после снятия блокировки, иначе промах
-      var to = cell ? cell.getBoundingClientRect() : null;
+      var to = cell ? $("img", cell).getBoundingClientRect() : null;
 
       if (to && to.width) {
         flip.style.transition = "transform 700ms cubic-bezier(.8,0,.38,.97)";
@@ -546,7 +555,8 @@
   });
 
   /* ---------------- GO ---------------- */
+  syncCellAspect();
   applyLang();
   onScroll();
-  window.addEventListener("resize", function () { if (open_) showShot(); });
+  window.addEventListener("resize", function () { syncCellAspect(); if (open_) syncNav(); });
 })();
