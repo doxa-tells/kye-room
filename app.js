@@ -101,9 +101,6 @@
   function applyLang() {
     document.documentElement.lang = lang;
     $$("[data-t]").forEach(function (n) { n.textContent = t(n.getAttribute("data-t")); });
-    $("#heroSub").textContent = lang === "ru"
-      ? "Не просто мебель — произведение искусства"
-      : "Not furniture — a work of art";
     $("#contactH").innerHTML = lang === "ru"
       ? "Соберём вашу<br><em>кровать</em>"
       : "Let us build<br><em>your bed</em>";
