@@ -281,10 +281,8 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
   backface-visibility:hidden;
 }
 .pv-stage .shot.show{opacity:1}
-/* пока летит клон — сцена пуста */
-.pv-stage.arming .shot{opacity:0!important;transition:none}
-.pv-stage.arming::after{opacity:0}
-.pv-stage.landing .shot.show{transition:opacity .3s var(--ease)}
+/* кадр появляется сразу, без ожидания — так открывалось в первой версии */
+.pv-stage.instant .shot.show{transition:none}
 .pv-stage::after{
   content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(to right,rgba(8,8,7,.28),transparent 30%,transparent 72%,rgba(8,8,7,.4));
@@ -302,7 +300,7 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
   display:flex;align-items:center;justify-content:space-between;gap:16px;
   padding:20px clamp(16px,2.4vw,30px);
 }
-#product.on .pv-stage:not(.arming) .pv-nav{opacity:1;transform:none;transition-delay:.15s}
+#product.on .pv-nav{opacity:1;transform:none;transition-delay:.28s}
 .modes{display:flex;gap:2px;border:1px solid var(--line);border-radius:0;overflow:hidden;background:rgba(8,8,7,.45);backdrop-filter:blur(10px)}
 .modes button{
   padding:10px 18px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
@@ -477,7 +475,7 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 <!-- ============ PRODUCT VIEW ============ -->
 <div id="product">
   <div class="pv-bg"></div>
-  <div class="pv-stage arming" id="stage">
+  <div class="pv-stage" id="stage">
     <div class="pv-nav">
       <div class="modes" id="modes">
         <button data-mode="nature" class="on" data-t="view_nature">На природе</button>

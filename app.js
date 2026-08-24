@@ -110,6 +110,16 @@
 
   /* ---------------- GRID ---------------- */
   var grid = $("#grid");
+  /* держим декодированные кадры в кэше: клик не должен упираться в распаковку webp */
+  var warmCache = {};
+  function warmUp(id) {
+    if (warmCache[id]) return;
+    var im = new Image();
+    warmCache[id] = im;
+    im.decoding = "async";
+    im.src = M[id].nature[0];
+    if (im.decode) im.decode().catch(function () {});
+  }
   function renderGrid() {
     grid.innerHTML = "";
     K.items.forEach(function (it) {
@@ -121,6 +131,9 @@
       c.appendChild(im);
       c.appendChild(el("div", "tag", it[lang].variant));
       c.appendChild(el("div", "lbl", title(m)));
+      function warm() { warmUp(it.id); }
+      c.addEventListener("mouseenter", warm);
+      c.addEventListener("touchstart", warm, { passive: true });
       c.addEventListener("click", function () { openProduct(it.id, c); });
       grid.appendChild(c);
     });
@@ -332,9 +345,9 @@
     var img = $("img", cell);
     var from = img.getBoundingClientRect();
 
-    stage.classList.add("arming");
-    stage.classList.remove("landing");
-    buildShots(id); renderPanel(id);
+    // кадр ставим мгновенно, без проявления — фон уже готов, когда карточка открывается
+    stage.classList.add("instant");
+    buildShots(id); renderPanel(id); showShot();
 
     product.classList.remove("closing");
     product.classList.add("on");
@@ -344,30 +357,16 @@
     placeFlip(to);
     applyDelta(delta(from, to));
     flip.style.opacity = "1";
-    flip.getBoundingClientRect();          // один reflow, дальше только композитинг
+    flip.getBoundingClientRect();
 
-    animFlip(820, 760);                    // гаснет уже после посадки
+    animFlip(760, 520);
     flip.style.transform = "none";
     flip.style.opacity = "0";
 
-    // настоящий кадр проявляется, только когда он реально загружен и клон почти долетел
-    var landed = false, ready = false, armTimeDone = false;
-    function land() {
-      if (landed || !ready || !armTimeDone) return;
-      landed = true;
-      stage.classList.add("landing");
-      stage.classList.remove("arming");
-    }
-    showShot(function () { ready = true; land(); });
-    flipTimers.push(setTimeout(function () { armTimeDone = true; land(); }, 300));
-    flipTimers.push(setTimeout(function () { armTimeDone = true; ready = true; land(); }, 1600));
-    flipTimers.push(setTimeout(function () {
-      stage.classList.remove("landing");
-      resetFlip();
-    }, 1150));
+    flipTimers.push(setTimeout(function () { stage.classList.remove("instant"); }, 100));
+    flipTimers.push(setTimeout(resetFlip, 1000));
 
     cell.classList.add("hidden");
-
     document.documentElement.classList.add("lock");
     back.classList.add("on");
     hdr.classList.add("solid");
@@ -408,7 +407,6 @@
     }, 360));
     flipTimers.push(setTimeout(function () {
       product.classList.remove("closing");
-      stage.classList.add("arming");
       resetFlip();
       busy = false;
     }, 700));
