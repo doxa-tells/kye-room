@@ -276,7 +276,6 @@
     srcCell = $('.cell[data-id="' + id + '"]') || srcCell;
     $$(".cell").forEach(function (c) {
       c.classList.toggle("hidden", c.dataset.id === id);
-      c.classList.toggle("dim", c.dataset.id !== id);
     });
     stage.classList.add("swapping");
     flipTimers.push(setTimeout(function () {
@@ -291,7 +290,8 @@
   var flipTimers = [];
   function clearTimers() { flipTimers.forEach(clearTimeout); flipTimers = []; }
 
-  /* ставим клон ровно в rect и готовим его к анимации */
+  /* клон всегда сверстан по rect сцены — значит в конце он пиксель-в-пиксель
+     совпадает с настоящим кадром, и его гашение не видно */
   function placeFlip(rect) {
     flip.style.transition = "none";
     flip.style.left = rect.left + "px";
@@ -299,30 +299,26 @@
     flip.style.width = rect.width + "px";
     flip.style.height = rect.height + "px";
     flip.style.transform = "none";
-    flipImg.style.transition = "none";
-    flipImg.style.transform = "none";
   }
-  /* трансформ, накладывающий элемент из rect `to` на rect `from` */
+  /* равномерный масштаб: картинка не искажается, кадрирование не плывёт */
   function delta(from, to) {
     return {
-      sx: from.width / to.width,
-      sy: from.height / to.height,
-      dx: from.left - to.left,
-      dy: from.top - to.top
+      s: Math.max(from.width / to.width, from.height / to.height),
+      dx: (from.left + from.width / 2) - (to.left + to.width / 2),
+      dy: (from.top + from.height / 2) - (to.top + to.height / 2)
     };
   }
   function applyDelta(d) {
-    flip.style.transform = "translate3d(" + d.dx + "px," + d.dy + "px,0) scale(" + d.sx + "," + d.sy + ")";
-    flipImg.style.transform = "scale(" + (1 / d.sx) + "," + (1 / d.sy) + ")";
+    flip.style.transform = "translate3d(" + d.dx + "px," + d.dy + "px,0) scale(" + d.s + ")";
   }
-  function animFlip(ms) {
-    var e = "cubic-bezier(.22,1,.36,1)";
-    flip.style.transition = "transform " + ms + "ms " + e + ",opacity 260ms " + e + " " + (ms - 180) + "ms";
-    flipImg.style.transition = "transform " + ms + "ms " + e;
+  function animFlip(ms, fadeAt) {
+    var e = "cubic-bezier(.62,.03,.2,1)";
+    flip.style.transition = "transform " + ms + "ms " + e + ",opacity 240ms linear " + fadeAt + "ms";
   }
   function resetFlip() {
-    flip.style.transition = "none"; flipImg.style.transition = "none";
-    flip.style.opacity = "0"; flip.style.transform = "none"; flipImg.style.transform = "none";
+    flip.style.transition = "none";
+    flip.style.opacity = "0";
+    flip.style.transform = "none";
     flip.style.width = "0px"; flip.style.height = "0px";
   }
 
@@ -348,11 +344,11 @@
     placeFlip(to);
     applyDelta(delta(from, to));
     flip.style.opacity = "1";
-    flip.getBoundingClientRect();          // reflow один раз, дальше только композитинг
+    flip.getBoundingClientRect();          // один reflow, дальше только композитинг
 
-    animFlip(780);
+    animFlip(820, 760);                    // гаснет уже после посадки
     flip.style.transform = "none";
-    flipImg.style.transform = "none";
+    flip.style.opacity = "0";
 
     // настоящий кадр проявляется, только когда он реально загружен и клон почти долетел
     var landed = false, ready = false, armTimeDone = false;
@@ -363,7 +359,7 @@
       stage.classList.remove("arming");
     }
     showShot(function () { ready = true; land(); });
-    flipTimers.push(setTimeout(function () { armTimeDone = true; land(); }, 540));
+    flipTimers.push(setTimeout(function () { armTimeDone = true; land(); }, 300));
     flipTimers.push(setTimeout(function () { armTimeDone = true; ready = true; land(); }, 1600));
     flipTimers.push(setTimeout(function () {
       stage.classList.remove("landing");
@@ -371,7 +367,6 @@
     }, 1150));
 
     cell.classList.add("hidden");
-    $$(".cell").forEach(function (c) { if (c !== cell) c.classList.add("dim"); });
 
     document.documentElement.classList.add("lock");
     back.classList.add("on");
@@ -392,7 +387,6 @@
     back.classList.remove("on");
     open_ = null;
     document.documentElement.classList.remove("lock");
-    $$(".cell").forEach(function (c) { c.classList.remove("dim"); });
 
     // rect плитки меряем ПОСЛЕ снятия блокировки — иначе промах
     var to = cell ? $("img", cell).getBoundingClientRect() : null;
@@ -402,7 +396,7 @@
       placeFlip(from);
       flip.style.opacity = "1";
       flip.getBoundingClientRect();
-      animFlip(640);
+      animFlip(660, 470);
       applyDelta(delta(to, from));
       flip.style.opacity = "0";
     } else {
