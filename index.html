@@ -280,12 +280,9 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 @media(max-width:900px){.pv-stage{position:relative;width:100%;height:56svh}}
 .pv-stage .shot{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  opacity:0;transition:opacity .5s var(--ease);
-  backface-visibility:hidden;
+  opacity:0;backface-visibility:hidden;
 }
-.pv-stage .shot.show{opacity:1}
-/* кадр всегда проявляется плавно */
-.pv-stage .shot.show{transition:opacity .5s var(--ease)}
+
 .pv-stage::after{
   content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(to right,rgba(8,8,7,.28),transparent 30%,transparent 72%,rgba(8,8,7,.4));

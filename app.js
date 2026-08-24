@@ -163,15 +163,36 @@
     ensureShots();
     front.removeAttribute("src"); back_.removeAttribute("src");
     front.classList.remove("show"); back_.classList.remove("show");
+    front.style.transition = "none"; back_.style.transition = "none";
+    front.style.opacity = "0"; back_.style.opacity = "0";
   }
 
-  /* грузим кадр и показываем кроссфейдом; onReady — когда пиксели готовы */
-  function setShot(src, onReady) {
+  /* Показ кадра. Прозрачность ставим inline с принудительным reflow —
+     на классах переход не запускался, если элемент в этот момент ещё скрыт. */
+  function paint(node, to, ms) {
+    node.style.transition = "none";
+    node.getBoundingClientRect();
+    node.style.transition = ms ? ("opacity " + ms + "ms cubic-bezier(.22,1,.36,1)") : "none";
+    node.style.opacity = to;
+  }
+
+  function setShot(src, onReady, ms) {
     ensureShots();
     var incoming = back_, outgoing = front;
     function reveal() {
       incoming.classList.add("show");
       outgoing.classList.remove("show");
+      if (ms === 0) {
+        paint(incoming, "1", 0);
+        paint(outgoing, "0", 0);
+      } else {
+        var d = ms || 500;
+        incoming.style.transition = "none";
+        incoming.style.opacity = "0";
+        incoming.getBoundingClientRect();
+        paint(incoming, "1", d);
+        paint(outgoing, "0", d);
+      }
       var t = front; front = back_; back_ = t;
       if (onReady) onReady();
     }
@@ -183,11 +204,15 @@
     incoming.onerror = reveal;
   }
 
-  function showShot(onReady) {
+  function showShot(onReady, ms) {
     var L = list(open_) || [];
-    if (L.length) setShot(L[Math.min(idx, L.length - 1)], onReady);
+    if (L.length) setShot(L[Math.min(idx, L.length - 1)], onReady, ms);
     else if (onReady) onReady();
+    syncNav();
+  }
 
+  function syncNav() {
+    var L = list(open_) || [];
     dotsBox.innerHTML = "";
     if (L.length > 1) {
       for (var i = 0; i < L.length; i++) {
@@ -292,7 +317,7 @@
     });
     stage.classList.add("swapping");
     flipTimers.push(setTimeout(function () {
-      buildShots(id); showShot(); renderPanel(id);
+      buildShots(id); showShot(null, 420); renderPanel(id);
       stage.classList.remove("swapping");
       panel.classList.remove("restage"); void panel.offsetWidth; panel.classList.add("restage");
     }, 260));
@@ -348,8 +373,7 @@
     var img = $("img", cell);
     var from = img.getBoundingClientRect();
 
-    // кадр ставим мгновенно, без проявления — фон уже готов, когда карточка открывается
-    buildShots(id); renderPanel(id); showShot();
+    buildShots(id); renderPanel(id); syncNav();
 
     product.classList.remove("closing");
     product.classList.add("on");
@@ -364,18 +388,27 @@
     animFlip(760);
     flip.style.transform = "none";
 
-    /* кадр проявляется под летящим клоном за 500 мс.
-       Клон гаснет только когда кадр реально готов — иначе был бы провал в чёрное. */
-    var flightDone = false, shotReady = false, faded = false;
-    function maybeFade() {
-      if (faded || !flightDone || !shotReady) return;
-      faded = true;
-      fadeFlipOut(320);
-      flipTimers.push(setTimeout(resetFlip, 420));
+    /* Во время полёта видна ровно одна картинка — клон. Кадр в сцене
+       включается мгновенно ПОД ним в момент посадки: они лежат в одном
+       прямоугольнике с одним кадрированием, поэтому подмены не видно. */
+    var flightDone = false, shotReady = false, handed = false;
+    function handOver() {
+      if (handed || !flightDone || !shotReady) return;
+      handed = true;
+      showShot(null, 0);            // без перехода: клон ещё сверху
+      fadeFlipOut(360);             // гаснет клон, под ним тот же кадр
+      flipTimers.push(setTimeout(resetFlip, 460));
     }
-    showShot(function () { shotReady = true; maybeFade(); });
-    flipTimers.push(setTimeout(function () { flightDone = true; maybeFade(); }, 560));
-    flipTimers.push(setTimeout(function () { shotReady = true; flightDone = true; maybeFade(); }, 2500));
+    // грузим кадр, но НЕ показываем, пока клон не долетел
+    var pre = new Image();
+    pre.decoding = "async";
+    pre.onload = function () { shotReady = true; handOver(); };
+    pre.onerror = function () { shotReady = true; handOver(); };
+    pre.src = (M[id].nature[0] || M[id].tile);
+    if (pre.complete && pre.naturalWidth) { shotReady = true; }
+
+    flipTimers.push(setTimeout(function () { flightDone = true; handOver(); }, 620));
+    flipTimers.push(setTimeout(function () { shotReady = true; flightDone = true; handOver(); }, 3000));
 
     cell.classList.add("hidden");
     document.documentElement.classList.add("lock");
