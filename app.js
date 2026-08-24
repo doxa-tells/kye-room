@@ -324,9 +324,12 @@
   function applyDelta(d) {
     flip.style.transform = "translate3d(" + d.dx + "px," + d.dy + "px,0) scale(" + d.s + ")";
   }
-  function animFlip(ms, fadeAt) {
-    var e = "cubic-bezier(.62,.03,.2,1)";
-    flip.style.transition = "transform " + ms + "ms " + e + ",opacity 240ms linear " + fadeAt + "ms";
+  function animFlip(ms) {
+    flip.style.transition = "transform " + ms + "ms cubic-bezier(.62,.03,.2,1)";
+  }
+  function fadeFlipOut(ms) {
+    flip.style.transition = flip.style.transition + ",opacity " + ms + "ms cubic-bezier(.22,1,.36,1)";
+    flip.style.opacity = "0";
   }
   function resetFlip() {
     flip.style.transition = "none";
@@ -346,7 +349,6 @@
     var from = img.getBoundingClientRect();
 
     // кадр ставим мгновенно, без проявления — фон уже готов, когда карточка открывается
-    stage.classList.add("instant");
     buildShots(id); renderPanel(id); showShot();
 
     product.classList.remove("closing");
@@ -359,12 +361,21 @@
     flip.style.opacity = "1";
     flip.getBoundingClientRect();
 
-    animFlip(760, 520);
+    animFlip(760);
     flip.style.transform = "none";
-    flip.style.opacity = "0";
 
-    flipTimers.push(setTimeout(function () { stage.classList.remove("instant"); }, 100));
-    flipTimers.push(setTimeout(resetFlip, 1000));
+    /* кадр проявляется под летящим клоном за 500 мс.
+       Клон гаснет только когда кадр реально готов — иначе был бы провал в чёрное. */
+    var flightDone = false, shotReady = false, faded = false;
+    function maybeFade() {
+      if (faded || !flightDone || !shotReady) return;
+      faded = true;
+      fadeFlipOut(320);
+      flipTimers.push(setTimeout(resetFlip, 420));
+    }
+    showShot(function () { shotReady = true; maybeFade(); });
+    flipTimers.push(setTimeout(function () { flightDone = true; maybeFade(); }, 560));
+    flipTimers.push(setTimeout(function () { shotReady = true; flightDone = true; maybeFade(); }, 2500));
 
     cell.classList.add("hidden");
     document.documentElement.classList.add("lock");
@@ -395,9 +406,9 @@
       placeFlip(from);
       flip.style.opacity = "1";
       flip.getBoundingClientRect();
-      animFlip(560, 340);
+      animFlip(560);
       applyDelta(delta(to, from));
-      flip.style.opacity = "0";
+      fadeFlipOut(240);
     } else {
       resetFlip();
     }
