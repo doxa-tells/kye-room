@@ -316,6 +316,7 @@
       c.classList.toggle("hidden", c.dataset.id === id);
     });
     stage.classList.add("swapping");
+    product.scrollTop = 0; panel.scrollTop = 0;
     flipTimers.push(setTimeout(function () {
       buildShots(id); showShot(null, 420); renderPanel(id);
       stage.classList.remove("swapping");
@@ -377,6 +378,10 @@
 
     product.classList.remove("closing");
     product.classList.add("on");
+    // на мобильном карточка — скроллируемый контейнер: без сброса прокрутки
+    // сцена меряется в смещённых координатах и клон летит мимо
+    product.scrollTop = 0; panel.scrollTop = 0;
+    stage.getBoundingClientRect();
     var to = stage.getBoundingClientRect();
 
     flipImg.src = img.currentSrc || img.src;
@@ -421,6 +426,7 @@
     if (!open_ || busy) return;
     busy = true; clearTimers();
     var id = open_, cell = srcCell;
+    product.scrollTop = 0; panel.scrollTop = 0;
     var from = stage.getBoundingClientRect();
     var shownSrc = (front && (front.currentSrc || front.getAttribute("src"))) || M[id].tile;
 
