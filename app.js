@@ -359,8 +359,34 @@
   function applyDelta(d) {
     flip.style.transform = "translate3d(" + d.dx + "px," + d.dy + "px,0) scale(" + d.s + ")";
   }
+  /* радиус плитки берём вычисленным с самой плитки: в переменной лежит
+     clamp(), из которого число не вытащить — раньше выходил ноль и углы
+     на первый кадр становились острыми */
+  function tileRadius() {
+    var c = grid.querySelector(".cell");
+    return c ? (parseFloat(getComputedStyle(c).borderTopLeftRadius) || 0) : 0;
+  }
+  /* с поправкой на масштаб: на уменьшенном клоне экранный радиус
+     должен совпадать с радиусом соседних плиток */
+  function radiusForScale(s) {
+    return (tileRadius() / (s || 1)) + "px";
+  }
+  /* Клон летит в воздухе, поэтому скругление у него всегда круговое.
+     К квадратным левым углам сцены он не идёт: они бы схлопнулись в ноль
+     ещё в полёте и мигнули острыми. Под клоном уже лежит сцена со своей
+     формой, так что на приземлении разницы не видно. */
+  function stageRadius() {
+    var cs = getComputedStyle(stage);
+    return Math.max(
+      parseFloat(cs.borderTopLeftRadius) || 0,
+      parseFloat(cs.borderTopRightRadius) || 0,
+      parseFloat(cs.borderBottomRightRadius) || 0,
+      parseFloat(cs.borderBottomLeftRadius) || 0
+    ) + "px";
+  }
   function animFlip(ms) {
-    flip.style.transition = "transform " + ms + "ms cubic-bezier(.62,.03,.2,1)";
+    flip.style.transition = "transform " + ms + "ms cubic-bezier(.62,.03,.2,1)" +
+                            ",border-radius " + ms + "ms cubic-bezier(.62,.03,.2,1)";
   }
   function fadeFlipOut(ms) {
     flip.style.transition = flip.style.transition + ",opacity " + ms + "ms cubic-bezier(.22,1,.36,1)";
@@ -388,6 +414,7 @@
 
   function resetFlip() {
     flip.style.transition = "none";
+    flip.style.borderRadius = tileRadius() + "px";
     flip.style.opacity = "0";
     flip.style.transform = "none";
     flip.style.width = "0px"; flip.style.height = "0px";
@@ -441,12 +468,15 @@
 
     flip.style.opacity = "0";
     armFlip(img.currentSrc || img.src, function () {
+      var d = delta(from, to);
       placeFlip(to);
-      applyDelta(delta(from, to));
+      applyDelta(d);
+      flip.style.borderRadius = radiusForScale(d.s);
       flip.style.opacity = "1";
       flip.getBoundingClientRect();
       animFlip(760);
       flip.style.transform = "none";
+      flip.style.borderRadius = stageRadius();
       // отсчёт от реального старта полёта, а не от клика
       flipTimers.push(setTimeout(function () { flightDone = true; handOver(); }, 620));
       flipTimers.push(setTimeout(function () { shotReady = true; flightDone = true; handOver(); }, 3000));
@@ -468,6 +498,7 @@
        реально готов — иначе на телефоне будет пустой кадр или блик. */
     armFlip(shownSrc, function () {
       placeFlip(from);
+      flip.style.borderRadius = stageRadius();
       flip.style.opacity = "1";
       flip.getBoundingClientRect();
 
@@ -483,8 +514,11 @@
       var to = cell ? $("img", cell).getBoundingClientRect() : null;
 
       if (to && to.width) {
-        flip.style.transition = "transform 700ms cubic-bezier(.8,0,.38,.97)";
-        applyDelta(delta(to, from));
+        var dc = delta(to, from);
+        flip.style.transition = "transform 700ms cubic-bezier(.8,0,.38,.97)" +
+                                ",border-radius 700ms cubic-bezier(.8,0,.38,.97)";
+        applyDelta(dc);
+        flip.style.borderRadius = radiusForScale(dc.s);
         flipTimers.push(setTimeout(function () {
           if (cell) cell.classList.remove("hidden");
           fadeFlipOut(220);
