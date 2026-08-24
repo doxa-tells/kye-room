@@ -3,7 +3,9 @@
   "use strict";
 
   var K = window.KYE, M = window.KYE_MEDIA;
-  var lang = (localStorage.getItem("kye-lang") === "en") ? "en" : "ru";
+  var LANGS = ["ru", "kz", "en", "es"];
+  var saved = localStorage.getItem("kye-lang");
+  var lang = (LANGS.indexOf(saved) > -1) ? saved : "ru";
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -103,12 +105,21 @@
   }
 
   function applyLang() {
-    document.documentElement.lang = lang;
+    /* kz — наш внутренний ключ; в разметке нужен код языка по ISO: kk */
+    document.documentElement.lang = { ru: "ru", kz: "kk", en: "en", es: "es" }[lang];
     $$("[data-t]").forEach(function (n) { n.textContent = t(n.getAttribute("data-t")); });
-    $("#contactH").innerHTML = lang === "ru"
-      ? "Соберём вашу<br><em>кровать</em>"
-      : "Let us build<br><em>your bed</em>";
-    $("#footR").textContent = lang === "ru" ? "Мебель ручной работы" : "Handmade furniture";
+    $("#contactH").innerHTML = {
+      ru: "Соберём вашу<br><em>кровать</em>",
+      kz: "Кереуетіңізді<br><em>бірге жинаймыз</em>",
+      en: "Let us build<br><em>your bed</em>",
+      es: "Construyamos su<br><em>cama</em>"
+    }[lang];
+    $("#footR").textContent = {
+      ru: "Мебель ручной работы",
+      kz: "Қолдан жасалған жиһаз",
+      en: "Handmade furniture",
+      es: "Muebles hechos a mano"
+    }[lang];
     $$(".lang button").forEach(function (b) { b.classList.toggle("on", b.dataset.lang === lang); });
     renderStory(); renderContact(); renderGrid();
     if (open_) renderPanel(open_);
@@ -264,7 +275,6 @@
     panel.appendChild(el("h3", "pv-title", title(m)));
     panel.appendChild(el("p", "pv-lead", ML.lead));
     panel.appendChild(el("p", "pv-text", ML.text));
-    panel.appendChild(el("p", "pv-scene", L.scene));
 
     // sibling fabrics of the same model
     var sibs = K.items.filter(function (s) { return s.model === it.model && s.id !== it.id; });
@@ -284,12 +294,14 @@
       panel.appendChild(box);
     }
 
-    var prices = (lang === "en" && m.prices_en) ? m.prices_en : m.prices;
+    var prices = m["prices_" + lang] || m.prices;
     var a1 = el("div", "acc");
     a1.appendChild(accHead(t("sizes")));
     var b1 = el("div", "acc-b"), b1i = el("div", "acc-b-in");
     prices.forEach(function (p) {
-      b1i.appendChild(el("div", "prow", "<span>" + p[0] + "</span><b>" + p[1] + " ₸</b>"));
+      /* значение может уже нести знак валюты в нужном падеже — тогда не дублируем */
+      var val = (p[1].indexOf("₸") > -1) ? p[1] : p[1] + " ₸";
+      b1i.appendChild(el("div", "prow", "<span>" + p[0] + "</span><b>" + val + "</b>"));
     });
     b1i.appendChild(el("p", "note", t("custom")));
     b1.appendChild(b1i); a1.appendChild(b1);
@@ -312,7 +324,7 @@
       var label = title(m) + " · " + L.variant;
       closeProduct();
       setTimeout(function () {
-        $("#fm").value = (lang === "ru" ? "Модель " : "Model ") + label;
+        $("#fm").value = ({ ru: "Модель ", kz: "Модель ", en: "Model ", es: "Modelo " }[lang]) + label;
         $("#contact").scrollIntoView({ behavior: "smooth" });
         setTimeout(function () { $("#fn").focus(); }, 700);
       }, 620);
