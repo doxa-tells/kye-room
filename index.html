@@ -160,8 +160,8 @@ h2 em{font-style:italic;color:var(--sand)}
 @media(max-width:760px){.cat-head{flex-direction:column;align-items:flex-start;gap:18px}.cat-head .lead{max-width:100%}}
 .grid{
   display:grid;grid-template-columns:repeat(5,1fr);
-  gap:1px;background:rgba(242,236,226,.1);
-  border-top:1px solid rgba(242,236,226,.1);border-bottom:1px solid rgba(242,236,226,.1);
+  /* просвет фоном страницы: плитки дышат, глаз не рябит от стыков */
+  gap:clamp(5px,.5vw,9px);
 }
 @media(max-width:1360px){.grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:1040px){.grid{grid-template-columns:repeat(3,1fr)}}
