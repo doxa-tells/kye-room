@@ -9,7 +9,7 @@ window.KYE = {
       nav_about: "Бренд", nav_craft: "Производство", nav_catalog: "Каталог", nav_contact: "Контакты",
       scroll: "Листайте", loading: "Загрузка",
       catalog_title: "Каталог",
-      catalog_note: "Двадцать пять позиций. Один силуэт живёт в нескольких тканях — каждая со своим характером.",
+      catalog_note: "Один силуэт живёт в нескольких тканях и каждая со своим характером.",
       view_nature: "На природе", view_room: "В интерьере",
       back: "К каталогу",
       sizes: "Размеры и стоимость", details: "Характеристики",
@@ -29,7 +29,7 @@ window.KYE = {
       nav_about: "Brand", nav_craft: "Craft", nav_catalog: "Catalogue", nav_contact: "Contact",
       scroll: "Scroll", loading: "Loading",
       catalog_title: "Catalogue",
-      catalog_note: "Twenty-five pieces. One silhouette lives in several cloths — each with its own character.",
+      catalog_note: "One silhouette lives in several cloths and each has its own character.",
       view_nature: "In the wild", view_room: "In a home",
       back: "Catalogue",
       sizes: "Sizes and price", details: "Specification",
@@ -72,7 +72,7 @@ window.KYE = {
     },
     {
       id: "craft",
-      photos: ["", ""],
+      photos: ["media/story/craft-1.webp", "media/story/craft-2.webp"],
       cta: "#contact",
       ru: {
         eyebrow: "Производство",

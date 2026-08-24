@@ -59,8 +59,8 @@
       // левая (или правая) колонка — две плашки под фото
       var media = el("div", "st-media rv");
       ["a", "b"].forEach(function (cls, n) {
-        var slot = el("div", "ph-slot " + cls);
         var src = (blk.photos && blk.photos[n]) || "";
+        var slot = el("div", "ph-slot " + cls + (src ? "" : " empty"));
         if (src) {
           var im = el("img"); im.src = src; im.alt = L.eyebrow; im.loading = "lazy"; im.decoding = "async";
           slot.appendChild(im);
@@ -447,6 +447,7 @@
     buildShots(id); renderPanel(id); syncNav();
 
     product.classList.remove("closing");
+    product.classList.remove("ready");
     product.classList.add("on");
     // на мобильном карточка — скроллируемый контейнер: без сброса прокрутки
     // сцена меряется в смещённых координатах и клон летит мимо
@@ -455,7 +456,6 @@
 
     cell.classList.add("hidden");
     document.documentElement.classList.add("lock");
-    back.classList.add("on");
     hdr.classList.add("solid");
     history.pushState({ p: id }, "", "#" + id);
 
@@ -467,6 +467,9 @@
       if (handed || !flightDone || !shotReady) return;
       handed = true;
       showShot(null, 0);
+      // кнопки появляются только теперь: до этого на экране был лишь летящий кадр
+      product.classList.add("ready");
+      back.classList.add("on");
       fadeFlipOut(360);
       flipTimers.push(setTimeout(resetFlip, 460));
     }
@@ -502,6 +505,7 @@
     var id = open_, cell = srcCell;
     open_ = null;
     back.classList.remove("on");
+    product.classList.remove("ready");
     product.scrollTop = 0; panel.scrollTop = 0;
 
     var from = stage.getBoundingClientRect();
