@@ -371,6 +371,7 @@
     clearTimers();
     open_ = id; mode = "nature"; idx = 0; srcCell = cell;
 
+    $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
     var img = $("img", cell);
     var from = img.getBoundingClientRect();
 
@@ -427,39 +428,47 @@
     busy = true; clearTimers();
     var id = open_, cell = srcCell;
     product.scrollTop = 0; panel.scrollTop = 0;
+
     var from = stage.getBoundingClientRect();
     var shownSrc = (front && (front.currentSrc || front.getAttribute("src"))) || M[id].tile;
 
-    // сцена гаснет сразу, дальше живёт только клон
+    /* Зеркало открытия, шаг 1: клон встаёт ровно на место кадра в сцене.
+       Картинка та же самая, прямоугольник тот же — подмены не видно. */
+    flipImg.src = shownSrc;
+    placeFlip(from);
+    flip.style.opacity = "1";
+    flip.getBoundingClientRect();
+
+    /* шаг 2: карточка уходит — панель вправо, фон растворяется, сетка проступает */
     product.classList.remove("on");
     product.classList.add("closing");
     back.classList.remove("on");
     open_ = null;
     document.documentElement.classList.remove("lock");
 
-    // rect плитки меряем ПОСЛЕ снятия блокировки — иначе промах
+    // rect плитки меряем после снятия блокировки, иначе промах
     var to = cell ? $("img", cell).getBoundingClientRect() : null;
 
     if (to && to.width) {
-      flipImg.src = shownSrc;
-      placeFlip(from);
-      flip.style.opacity = "1";
-      flip.getBoundingClientRect();
-      animFlip(560);
+      /* шаг 3: клон летит обратно в плитку зеркальной кривой */
+      flip.style.transition = "transform 700ms cubic-bezier(.8,0,.38,.97)";
       applyDelta(delta(to, from));
-      fadeFlipOut(240);
+
+      /* шаг 4: на посадке плитка возвращается на место, клон растворяется */
+      flipTimers.push(setTimeout(function () {
+        if (cell) cell.classList.remove("hidden");
+        fadeFlipOut(220);
+        flipTimers.push(setTimeout(resetFlip, 300));
+      }, 640));
     } else {
+      $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
       resetFlip();
     }
 
     flipTimers.push(setTimeout(function () {
-      $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
-    }, 300));
-    flipTimers.push(setTimeout(function () {
       product.classList.remove("closing");
-      resetFlip();
       busy = false;
-    }, 620));
+    }, 430));
     if (location.hash) history.pushState({}, "", location.pathname);
   }
 
