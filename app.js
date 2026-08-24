@@ -49,26 +49,42 @@
   /* ---------------- i18n ---------------- */
   function t(k) { return K.ui[lang][k] || k; }
 
-  function renderIntro() {
-    K.intro[lang].forEach(function (s, i) {
-      var host = $("#intro" + i); if (!host) return;
+  function renderStory() {
+    K.story.forEach(function (blk, i) {
+      var host = $("#storyRow" + i); if (!host) return;
+      var L = blk[lang];
+      host.id = "storyRow" + i;
       host.innerHTML = "";
-      var left = el("div", "rv");
-      left.appendChild(el("div", "eyebrow", s.eyebrow));
-      left.appendChild(el("h2", null, s.title));
-      host.appendChild(left);
-      host.appendChild(el("p", "lead rv", s.body));
-      if (s.specs) {
-        var sp = el("div", "specs rv");
-        s.specs.forEach(function (r, n) {
-          var row = el("div", "spec");
-          row.appendChild(el("b", null, "0" + (n + 1)));
-          row.appendChild(el("h4", null, r[0]));
-          row.appendChild(el("p", null, r[1]));
-          sp.appendChild(row);
-        });
-        host.appendChild(sp);
-      }
+
+      // левая (или правая) колонка — две плашки под фото
+      var media = el("div", "st-media rv");
+      ["a", "b"].forEach(function (cls, n) {
+        var slot = el("div", "ph-slot " + cls);
+        var src = (blk.photos && blk.photos[n]) || "";
+        if (src) {
+          var im = el("img"); im.src = src; im.alt = L.eyebrow; im.loading = "lazy"; im.decoding = "async";
+          slot.appendChild(im);
+        } else {
+          slot.appendChild(el("div", "hint", t("photo_hint")));
+        }
+        media.appendChild(slot);
+      });
+      host.appendChild(media);
+
+      // текстовая колонка
+      var txt = el("div", "st-text");
+      txt.appendChild(el("div", "eyebrow rv", L.eyebrow));
+      txt.appendChild(el("h2", "rv", L.title));
+      txt.appendChild(el("p", "lead rv", L.body));
+      var a = el("a", "st-cta rv",
+        "<span>" + L.cta + "</span>" +
+        '<i><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></i>');
+      a.href = blk.cta || "#catalog";
+      txt.appendChild(a);
+      host.appendChild(txt);
+
+      // якорь для пункта меню
+      if (blk.id === "craft") host.id = "storyRow1";
     });
   }
 
@@ -96,7 +112,7 @@
       : "Let us build<br><em>your bed</em>";
     $("#footR").textContent = lang === "ru" ? "Мебель ручной работы" : "Handmade furniture";
     $$(".lang button").forEach(function (b) { b.classList.toggle("on", b.dataset.lang === lang); });
-    renderIntro(); renderContact(); renderGrid();
+    renderStory(); renderContact(); renderGrid();
     if (open_) renderPanel(open_);
     revealInit();
   }

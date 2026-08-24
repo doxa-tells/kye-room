@@ -19,6 +19,7 @@ window.KYE = {
       lift_yes: "Подъёмный механизм предусмотрен.",
       lift_no: "Подъёмный механизм для этой модели не предусмотрен.",
       other: "Другие ткани этой модели",
+      photo_hint: "Место под фото<br>основателей за работой",
       form_name: "Имя", form_phone: "Телефон", form_msg: "Модель, размер, ткань",
       form_send: "Отправить", form_ok: "Спасибо. Мы свяжемся с вами в течение дня.",
       c_phone: "Телефон", c_inst: "Instagram", c_show: "Шоурум", c_ship: "Доставка",
@@ -39,6 +40,7 @@ window.KYE = {
       lift_yes: "Storage lift mechanism included.",
       lift_no: "No storage lift mechanism for this model.",
       other: "Other fabrics of this model",
+      photo_hint: "Photo slot<br>founders at work",
       form_name: "Name", form_phone: "Phone", form_msg: "Model, size, fabric",
       form_send: "Send", form_ok: "Thank you. We will be in touch within a day.",
       c_phone: "Phone", c_inst: "Instagram", c_show: "Showroom", c_ship: "Delivery",
@@ -47,44 +49,47 @@ window.KYE = {
     }
   },
 
-  intro: {
-    ru: [
-      {
+  /* ---------- БРЕНД И ПРОИЗВОДСТВО ----------
+     photos: пути к двум снимкам для каждого блока.
+     Оставьте пустыми — покажется рамка-заглушка.
+     Положите файлы, например, в media/story/ и укажите здесь:
+       photos: ["media/story/brand-1.jpg", "media/story/brand-2.jpg"]        */
+  story: [
+    {
+      id: "about",
+      photos: ["", ""],
+      cta: "#catalog",
+      ru: {
         eyebrow: "Бренд",
         title: "Не просто мебель —<br><em>произведение искусства</em>",
-        body: "KYE ROOM не выпускает партии. Каждая кровать рождается в единственном экземпляре: под размер комнаты, под характер света, под привычку хозяина просыпаться на правом боку. Мы делаем предметы, которые остаются в доме дольше, чем ремонт вокруг них."
+        body: "KYE ROOM не выпускает партии. Каждая кровать рождается в единственном экземпляре: под размер комнаты, под характер света, под привычку хозяина просыпаться на правом боку. Мы делаем предметы, которые остаются в доме дольше, чем ремонт вокруг них.",
+        cta: "Смотреть каталог"
       },
-      {
-        eyebrow: "Производство",
-        title: "Ткани из Европы,<br><em>каркас на ЧПУ</em>",
-        body: "Англия, Франция, Италия, Бельгия и лучшие турецкие мануфактуры. Только натуральный состав — лён и хлопок, высокая прочность и благородная фактура. Каркас режется на ЧПУ-станке с точностью до десятой миллиметра, обивку от первого шва до последнего ведёт один мастер.",
-        specs: [
-          ["Ткани", "Лён и хлопок из Европы, устойчивость к истиранию от 40 000 циклов Мартиндейла"],
-          ["Каркас", "Раскрой на ЧПУ, берёзовая фанера и массив хвои камерной сушки"],
-          ["Наполнение", "Многослойный ППУ разной плотности и холлофайбер — форма держится годами"],
-          ["Сборка", "Ручная работа одного мастера, гарантия 5 лет на конструкцию"]
-        ]
-      }
-    ],
-    en: [
-      {
+      en: {
         eyebrow: "Brand",
         title: "Not furniture —<br><em>a work of art</em>",
-        body: "KYE ROOM does not run batches. Every bed is made once: to the size of the room, to the character of its light, to the habit of sleeping on your right side. We build pieces that outlast the renovation around them."
+        body: "KYE ROOM does not run batches. Every bed is made once: to the size of the room, to the character of its light, to the habit of sleeping on your right side. We build pieces that outlast the renovation around them.",
+        cta: "See the catalogue"
+      }
+    },
+    {
+      id: "craft",
+      photos: ["", ""],
+      cta: "#contact",
+      ru: {
+        eyebrow: "Производство",
+        title: "Ткани из Европы,<br><em>каркас на ЧПУ</em>",
+        body: "Англия, Франция, Италия, Бельгия и лучшие турецкие мануфактуры. Только натуральный состав — лён и хлопок, высокая прочность и благородная фактура. Каркас режется на ЧПУ-станке с точностью до десятой миллиметра, обивку от первого шва до последнего ведёт один мастер. Устойчивость тканей к истиранию — от 40 000 циклов Мартиндейла, гарантия на конструкцию — пять лет.",
+        cta: "Оставить заявку"
       },
-      {
+      en: {
         eyebrow: "Craft",
         title: "European cloth,<br><em>CNC-cut frame</em>",
-        body: "England, France, Italy, Belgium and the best Turkish mills. Natural fibres only — linen and cotton, high tensile strength and a noble hand. The frame is cut on a CNC machine to a tenth of a millimetre, and one craftsman carries the upholstery from the first seam to the last.",
-        specs: [
-          ["Fabrics", "European linen and cotton, abrasion resistance from 40,000 Martindale cycles"],
-          ["Frame", "CNC-cut birch plywood and kiln-dried softwood"],
-          ["Filling", "Layered foam of varying density with hollow fibre — the shape holds for years"],
-          ["Assembly", "Handmade by a single craftsman, five-year structural warranty"]
-        ]
+        body: "England, France, Italy, Belgium and the best Turkish mills. Natural fibres only — linen and cotton, high tensile strength and a noble hand. The frame is cut on a CNC machine to a tenth of a millimetre, and one craftsman carries the upholstery from the first seam to the last. Abrasion resistance from 40,000 Martindale cycles, five-year structural warranty.",
+        cta: "Make an enquiry"
       }
-    ]
-  },
+    }
+  ],
 
   contact: { phone: "+7 702 199 09 95", tel: "+77021990995", instagram: "KYE.ROOM", instagram_url: "https://instagram.com/kye.room" },
 
