@@ -395,7 +395,7 @@
       placeFlip(from);
       flip.style.opacity = "1";
       flip.getBoundingClientRect();
-      animFlip(660, 470);
+      animFlip(560, 340);
       applyDelta(delta(to, from));
       flip.style.opacity = "0";
     } else {
@@ -404,12 +404,12 @@
 
     flipTimers.push(setTimeout(function () {
       $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
-    }, 360));
+    }, 300));
     flipTimers.push(setTimeout(function () {
       product.classList.remove("closing");
       resetFlip();
       busy = false;
-    }, 700));
+    }, 620));
     if (location.hash) history.pushState({}, "", location.pathname);
   }
 

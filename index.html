@@ -261,10 +261,13 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 #product.on,#product.closing{visibility:visible}
 #product.on{pointer-events:auto}
 #product.closing{pointer-events:none}
-#product.closing .pv-bg{opacity:0;transition:opacity .42s var(--ease) .08s}
-#product.closing .pv-panel{transform:translateX(100%);transition:transform .55s var(--ease)}
+/* при закрытии гаснет вся карточка целиком, включая тёмный блок сцены */
+#product.closing{opacity:0;transition:opacity .4s var(--ease)}
+#product.closing .pv-panel{transform:translateX(100%);transition:transform .5s var(--ease)}
+#product.closing .pv-nav{opacity:0;transition:opacity .2s var(--ease)}
+/* фото убираем сразу — его роль на закрытии играет летящий клон,
+   тогда гаснет только дешёвая заливка, а не картинка 1800px */
 #product.closing .pv-stage .shot{opacity:0!important;transition:none}
-#product.closing .pv-nav{opacity:0;transition:opacity .25s var(--ease)}
 .pv-bg{
   position:absolute;inset:0;background:var(--bg);
   opacity:0;transition:opacity .34s var(--ease);
