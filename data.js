@@ -55,7 +55,7 @@ window.KYE = {
   story: [
     {
       id: "about",
-      photos: ["", ""],
+      photos: ["media/story/brand-1.webp"],
       cta: "#catalog",
       ru: {
         eyebrow: "Бренд",

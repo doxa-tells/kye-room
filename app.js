@@ -56,30 +56,34 @@
       host.id = "storyRow" + i;
       host.innerHTML = "";
 
-      // левая (или правая) колонка — две плашки под фото
+      // колонка с фото: один кадр — крупно, два — с перекрытием
       var media = el("div", "st-media rv");
-      ["a", "b"].forEach(function (cls, n) {
-        var src = (blk.photos && blk.photos[n]) || "";
-        var slot = el("div", "ph-slot " + cls + (src ? "" : " empty"));
-        if (src) {
-          var im = el("img"); im.src = src; im.alt = L.eyebrow; im.loading = "lazy"; im.decoding = "async";
-          slot.appendChild(im);
-        } else {
-          slot.appendChild(el("div", "hint", t("photo_hint")));
-        }
-        media.appendChild(slot);
-      });
+      var pics = (blk.photos || []).filter(function (x) { return !!x; });
+      if (pics.length === 1) {
+        var solo = el("div", "ph-slot solo");
+        var si = el("img"); si.src = pics[0]; si.alt = L.eyebrow;
+        si.loading = "lazy"; si.decoding = "async";
+        solo.appendChild(si);
+        media.appendChild(solo);
+      } else {
+        ["a", "b"].forEach(function (cls, n) {
+          var src = (blk.photos && blk.photos[n]) || "";
+          var slot = el("div", "ph-slot " + cls + (src ? "" : " empty"));
+          if (src) {
+            var im = el("img"); im.src = src; im.alt = L.eyebrow; im.loading = "lazy"; im.decoding = "async";
+            slot.appendChild(im);
+          } else {
+            slot.appendChild(el("div", "hint", t("photo_hint")));
+          }
+          media.appendChild(slot);
+        });
+      }
       host.appendChild(media);
 
       // текстовая колонка
       var txt = el("div", "st-text");
       txt.appendChild(el("h2", "rv", L.title));
       txt.appendChild(el("p", "lead rv", L.body));
-      var a = el("a", "st-cta rv",
-        "<span>" + L.cta + "</span>" +
-        '<i><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></i>');
-      a.href = blk.cta || "#catalog";
-      txt.appendChild(a);
       host.appendChild(txt);
 
       // якорь для пункта меню
