@@ -46,7 +46,7 @@
   --hdr:74px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
 html.lock,body.lock{overflow:hidden}
 body{
   background:var(--bg);color:var(--ink);
@@ -172,10 +172,11 @@ h2 em{font-style:italic;color:var(--sand)}
 .cell img{
   width:100%;height:100%;object-fit:cover;
   transform:scale(.82);opacity:.78;
-  transition:transform 1s var(--ease),opacity .7s var(--ease),filter .7s var(--ease);
-  filter:saturate(.9) brightness(.9);
+  transition:transform .9s var(--ease),opacity .6s var(--ease);
+  backface-visibility:hidden;
 }
-.cell:hover img{transform:scale(.92);opacity:1;filter:saturate(1) brightness(1)}
+.cell:hover img{will-change:transform}
+.cell:hover img{transform:scale(.92);opacity:1}
 .cell.dim img{opacity:.25}
 .cell::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:52%;pointer-events:none;
@@ -261,9 +262,9 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 #product.on,#product.closing{visibility:visible}
 #product.on{pointer-events:auto}
 #product.closing{pointer-events:none}
-#product.closing .pv-bg{opacity:0;transition:opacity .5s var(--ease) .1s}
+#product.closing .pv-bg{opacity:0;transition:opacity .42s var(--ease) .08s}
 #product.closing .pv-panel{transform:translateX(100%);transition:transform .55s var(--ease)}
-#product.closing .pv-stage .shot{opacity:0;transition:opacity .3s var(--ease)}
+#product.closing .pv-stage .shot{opacity:0!important;transition:none}
 #product.closing .pv-nav{opacity:0;transition:opacity .25s var(--ease)}
 .pv-bg{
   position:absolute;inset:0;background:var(--bg);
@@ -277,7 +278,8 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 @media(max-width:900px){.pv-stage{position:relative;width:100%;height:56svh}}
 .pv-stage .shot{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  opacity:0;transition:opacity .75s var(--ease);
+  opacity:0;transition:opacity .55s var(--ease);
+  backface-visibility:hidden;
 }
 .pv-stage .shot.show{opacity:1}
 /* пока летит клон — сцена пуста */
@@ -291,8 +293,13 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 /* FLIP clone */
 #flip{
   position:fixed;z-index:90;overflow:hidden;pointer-events:none;opacity:0;background:var(--bg-2);
+  transform-origin:0 0;will-change:transform,opacity;backface-visibility:hidden;
+  contain:paint;
 }
-#flip img{width:100%;height:100%;object-fit:cover}
+#flip img{
+  width:100%;height:100%;object-fit:cover;
+  transform-origin:0 0;will-change:transform;backface-visibility:hidden;
+}
 
 .pv-nav{
   position:absolute;left:0;right:0;bottom:0;z-index:3;

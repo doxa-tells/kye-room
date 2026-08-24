@@ -134,27 +134,50 @@
 
   function list(id) { return M[id][mode] || []; }
 
-  function buildShots(id) {
-    $$(".shot", stage).forEach(function (n) { n.remove(); });
-    shots = [];
-    ["nature", "room"].forEach(function (mo) {
-      M[id][mo].forEach(function (src, i) {
-        var im = el("img", "shot"); im.src = src; im.alt = ""; im.decoding = "async";
-        im.dataset.mode = mo; im.dataset.i = i;
-        stage.insertBefore(im, stage.firstChild);
-        shots.push(im);
-      });
-    });
+  var shotA = null, shotB = null, front = null, back_ = null;
+
+  function ensureShots() {
+    if (shotA) return;
+    shotA = el("img", "shot"); shotB = el("img", "shot");
+    shotA.alt = ""; shotB.alt = "";
+    shotA.decoding = "async"; shotB.decoding = "async";
+    stage.insertBefore(shotB, stage.firstChild);
+    stage.insertBefore(shotA, stage.firstChild);
+    front = shotA; back_ = shotB;
   }
 
-  function showShot() {
-    shots.forEach(function (s) {
-      s.classList.toggle("show", s.dataset.mode === mode && +s.dataset.i === idx);
-    });
-    var L = list(open_).length;
+  function buildShots(id) {
+    ensureShots();
+    front.removeAttribute("src"); back_.removeAttribute("src");
+    front.classList.remove("show"); back_.classList.remove("show");
+  }
+
+  /* грузим кадр и показываем кроссфейдом; onReady — когда пиксели готовы */
+  function setShot(src, onReady) {
+    ensureShots();
+    var incoming = back_, outgoing = front;
+    function reveal() {
+      incoming.classList.add("show");
+      outgoing.classList.remove("show");
+      var t = front; front = back_; back_ = t;
+      if (onReady) onReady();
+    }
+    if (incoming.getAttribute("src") === src && incoming.complete) { reveal(); return; }
+    incoming.onload = null; incoming.onerror = null;
+    incoming.src = src;
+    if (incoming.complete && incoming.naturalWidth) { reveal(); return; }
+    incoming.onload = reveal;
+    incoming.onerror = reveal;
+  }
+
+  function showShot(onReady) {
+    var L = list(open_) || [];
+    if (L.length) setShot(L[Math.min(idx, L.length - 1)], onReady);
+    else if (onReady) onReady();
+
     dotsBox.innerHTML = "";
-    if (L > 1) {
-      for (var i = 0; i < L; i++) {
+    if (L.length > 1) {
+      for (var i = 0; i < L.length; i++) {
         (function (i) {
           var d = el("i"); if (i === idx) d.className = "on";
           d.addEventListener("click", function () { idx = i; showShot(); });
@@ -162,7 +185,7 @@
         })(i);
       }
     }
-    $$(".arrows").forEach(function (a) { a.style.visibility = L > 1 ? "visible" : "hidden"; });
+    $$(".arrows").forEach(function (a) { a.style.visibility = L.length > 1 ? "visible" : "hidden"; });
     $$("button", modesBox).forEach(function (b) { b.classList.toggle("on", b.dataset.mode === mode); });
   }
 
@@ -264,11 +287,46 @@
     history.replaceState({ p: id }, "", "#" + id);
   }
 
-  /* ---- FLIP open ----
-     Порядок важен: сцена стоит пустой (.arming), летит только клон плитки.
-     Когда клон долетел — кадр проявляется под ним и клон гаснет. */
+  /* ---- FLIP на трансформах: никакого пересчёта лейаута ---- */
   var flipTimers = [];
   function clearTimers() { flipTimers.forEach(clearTimeout); flipTimers = []; }
+
+  /* ставим клон ровно в rect и готовим его к анимации */
+  function placeFlip(rect) {
+    flip.style.transition = "none";
+    flip.style.left = rect.left + "px";
+    flip.style.top = rect.top + "px";
+    flip.style.width = rect.width + "px";
+    flip.style.height = rect.height + "px";
+    flip.style.transform = "none";
+    flipImg.style.transition = "none";
+    flipImg.style.transform = "none";
+  }
+  /* трансформ, накладывающий элемент из rect `to` на rect `from` */
+  function delta(from, to) {
+    return {
+      sx: from.width / to.width,
+      sy: from.height / to.height,
+      dx: from.left - to.left,
+      dy: from.top - to.top
+    };
+  }
+  function applyDelta(d) {
+    flip.style.transform = "translate3d(" + d.dx + "px," + d.dy + "px,0) scale(" + d.sx + "," + d.sy + ")";
+    flipImg.style.transform = "scale(" + (1 / d.sx) + "," + (1 / d.sy) + ")";
+  }
+  function animFlip(ms) {
+    var e = "cubic-bezier(.22,1,.36,1)";
+    flip.style.transition = "transform " + ms + "ms " + e + ",opacity 260ms " + e + " " + (ms - 180) + "ms";
+    flipImg.style.transition = "transform " + ms + "ms " + e;
+  }
+  function resetFlip() {
+    flip.style.transition = "none"; flipImg.style.transition = "none";
+    flip.style.opacity = "0"; flip.style.transform = "none"; flipImg.style.transform = "none";
+    flip.style.width = "0px"; flip.style.height = "0px";
+  }
+
+  var busy = false;
 
   function openProduct(id, cell) {
     if (open_ || busy) return;
@@ -280,31 +338,36 @@
 
     stage.classList.add("arming");
     stage.classList.remove("landing");
-    buildShots(id); renderPanel(id); showShot();
+    buildShots(id); renderPanel(id);
 
     product.classList.remove("closing");
     product.classList.add("on");
     var to = stage.getBoundingClientRect();
 
-    // клон = ровно тот кадр, что лежит в плитке, чтобы стык был незаметен
     flipImg.src = img.currentSrc || img.src;
-    flip.style.cssText = "left:" + from.left + "px;top:" + from.top + "px;width:" +
-      from.width + "px;height:" + from.height + "px;opacity:1;transition:none";
-    flip.getBoundingClientRect();
-    flip.style.transition = "left .78s var(--ease),top .78s var(--ease),width .78s var(--ease),height .78s var(--ease),opacity .34s var(--ease) .62s";
-    flip.style.left = to.left + "px"; flip.style.top = to.top + "px";
-    flip.style.width = to.width + "px"; flip.style.height = to.height + "px";
+    placeFlip(to);
+    applyDelta(delta(from, to));
+    flip.style.opacity = "1";
+    flip.getBoundingClientRect();          // reflow один раз, дальше только композитинг
 
-    // клон почти долетел — проявляем настоящий кадр под ним, затем гасим клон
-    flipTimers.push(setTimeout(function () {
+    animFlip(780);
+    flip.style.transform = "none";
+    flipImg.style.transform = "none";
+
+    // настоящий кадр проявляется, только когда он реально загружен и клон почти долетел
+    var landed = false, ready = false, armTimeDone = false;
+    function land() {
+      if (landed || !ready || !armTimeDone) return;
+      landed = true;
       stage.classList.add("landing");
       stage.classList.remove("arming");
-      flip.style.opacity = "0";
-    }, 560));
+    }
+    showShot(function () { ready = true; land(); });
+    flipTimers.push(setTimeout(function () { armTimeDone = true; land(); }, 540));
+    flipTimers.push(setTimeout(function () { armTimeDone = true; ready = true; land(); }, 1600));
     flipTimers.push(setTimeout(function () {
       stage.classList.remove("landing");
-      flip.style.transition = "none";
-      flip.style.opacity = "0";
+      resetFlip();
     }, 1150));
 
     cell.classList.add("hidden");
@@ -316,26 +379,14 @@
     history.pushState({ p: id }, "", "#" + id);
   }
 
-  var busy = false;
   function closeProduct() {
     if (!open_ || busy) return;
     busy = true; clearTimers();
     var id = open_, cell = srcCell;
-    var to = cell ? $("img", cell).getBoundingClientRect() : null;
     var from = stage.getBoundingClientRect();
+    var shownSrc = (front && (front.currentSrc || front.getAttribute("src"))) || M[id].tile;
 
-    if (to && to.width) {
-      var cur = shots.filter(function (s) { return s.classList.contains("show"); })[0];
-      flipImg.src = (cur && (cur.currentSrc || cur.src)) || M[id].tile;
-      flip.style.cssText = "left:" + from.left + "px;top:" + from.top + "px;width:" +
-        from.width + "px;height:" + from.height + "px;opacity:1;transition:none";
-      flip.getBoundingClientRect();
-      flip.style.transition = "left .66s var(--ease),top .66s var(--ease),width .66s var(--ease),height .66s var(--ease),opacity .26s var(--ease) .46s";
-      flip.style.left = to.left + "px"; flip.style.top = to.top + "px";
-      flip.style.width = to.width + "px"; flip.style.height = to.height + "px";
-      flip.style.opacity = "0";
-    }
-
+    // сцена гаснет сразу, дальше живёт только клон
     product.classList.remove("on");
     product.classList.add("closing");
     back.classList.remove("on");
@@ -343,12 +394,28 @@
     document.documentElement.classList.remove("lock");
     $$(".cell").forEach(function (c) { c.classList.remove("dim"); });
 
+    // rect плитки меряем ПОСЛЕ снятия блокировки — иначе промах
+    var to = cell ? $("img", cell).getBoundingClientRect() : null;
+
+    if (to && to.width) {
+      flipImg.src = shownSrc;
+      placeFlip(from);
+      flip.style.opacity = "1";
+      flip.getBoundingClientRect();
+      animFlip(640);
+      applyDelta(delta(to, from));
+      flip.style.opacity = "0";
+    } else {
+      resetFlip();
+    }
+
     flipTimers.push(setTimeout(function () {
       $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
-    }, 400));
+    }, 360));
     flipTimers.push(setTimeout(function () {
       product.classList.remove("closing");
       stage.classList.add("arming");
+      resetFlip();
       busy = false;
     }, 700));
     if (location.hash) history.pushState({}, "", location.pathname);
