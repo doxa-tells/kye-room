@@ -357,6 +357,26 @@
     flip.style.transition = flip.style.transition + ",opacity " + ms + "ms cubic-bezier(.22,1,.36,1)";
     flip.style.opacity = "0";
   }
+  /* Каждый полёт — свежий <img>. Переиспользованный элемент продолжает
+     рисовать прошлую картинку, пока грузится новая: на телефоне это
+     видно как блик предыдущего кадра. */
+  function armFlip(src, go) {
+    var im = new Image();
+    im.decoding = "async";
+    im.alt = "";
+    flip.innerHTML = "";
+    flip.appendChild(im);
+    flipImg = im;
+
+    var fired = false;
+    function ready() { if (fired) return; fired = true; go(); }
+    im.src = src;
+    if (im.complete && im.naturalWidth) { ready(); return; }
+    if (im.decode) im.decode().then(ready).catch(ready);
+    else { im.onload = ready; im.onerror = ready; }
+    flipTimers.push(setTimeout(ready, 160));   // страховка от зависания
+  }
+
   function resetFlip() {
     flip.style.transition = "none";
     flip.style.opacity = "0";
@@ -373,7 +393,7 @@
 
     $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
     var img = $("img", cell);
-    var from = img.getBoundingClientRect();
+    var from = cell.getBoundingClientRect();
 
     buildShots(id); renderPanel(id); syncNav();
 
@@ -382,93 +402,96 @@
     // на мобильном карточка — скроллируемый контейнер: без сброса прокрутки
     // сцена меряется в смещённых координатах и клон летит мимо
     product.scrollTop = 0; panel.scrollTop = 0;
-    stage.getBoundingClientRect();
     var to = stage.getBoundingClientRect();
-
-    flipImg.src = img.currentSrc || img.src;
-    placeFlip(to);
-    applyDelta(delta(from, to));
-    flip.style.opacity = "1";
-    flip.getBoundingClientRect();
-
-    animFlip(760);
-    flip.style.transform = "none";
-
-    /* Во время полёта видна ровно одна картинка — клон. Кадр в сцене
-       включается мгновенно ПОД ним в момент посадки: они лежат в одном
-       прямоугольнике с одним кадрированием, поэтому подмены не видно. */
-    var flightDone = false, shotReady = false, handed = false;
-    function handOver() {
-      if (handed || !flightDone || !shotReady) return;
-      handed = true;
-      showShot(null, 0);            // без перехода: клон ещё сверху
-      fadeFlipOut(360);             // гаснет клон, под ним тот же кадр
-      flipTimers.push(setTimeout(resetFlip, 460));
-    }
-    // грузим кадр, но НЕ показываем, пока клон не долетел
-    var pre = new Image();
-    pre.decoding = "async";
-    pre.onload = function () { shotReady = true; handOver(); };
-    pre.onerror = function () { shotReady = true; handOver(); };
-    pre.src = (M[id].nature[0] || M[id].tile);
-    if (pre.complete && pre.naturalWidth) { shotReady = true; }
-
-    flipTimers.push(setTimeout(function () { flightDone = true; handOver(); }, 620));
-    flipTimers.push(setTimeout(function () { shotReady = true; flightDone = true; handOver(); }, 3000));
 
     cell.classList.add("hidden");
     document.documentElement.classList.add("lock");
     back.classList.add("on");
     hdr.classList.add("solid");
     history.pushState({ p: id }, "", "#" + id);
+
+    /* Во время полёта видна ровно одна картинка — клон. Кадр в сцене
+       включается мгновенно ПОД ним в момент посадки: тот же прямоугольник,
+       то же кадрирование, поэтому подмены не видно. */
+    var flightDone = false, shotReady = false, handed = false;
+    function handOver() {
+      if (handed || !flightDone || !shotReady) return;
+      handed = true;
+      showShot(null, 0);
+      fadeFlipOut(360);
+      flipTimers.push(setTimeout(resetFlip, 460));
+    }
+
+    // большой кадр грузим сразу, но не показываем
+    var pre = new Image();
+    pre.decoding = "async";
+    pre.onload = function () { shotReady = true; handOver(); };
+    pre.onerror = function () { shotReady = true; handOver(); };
+    pre.src = (M[id].nature[0] || M[id].tile);
+    if (pre.complete && pre.naturalWidth) shotReady = true;
+
+    flip.style.opacity = "0";
+    armFlip(img.currentSrc || img.src, function () {
+      placeFlip(to);
+      applyDelta(delta(from, to));
+      flip.style.opacity = "1";
+      flip.getBoundingClientRect();
+      animFlip(760);
+      flip.style.transform = "none";
+      // отсчёт от реального старта полёта, а не от клика
+      flipTimers.push(setTimeout(function () { flightDone = true; handOver(); }, 620));
+      flipTimers.push(setTimeout(function () { shotReady = true; flightDone = true; handOver(); }, 3000));
+    });
   }
 
   function closeProduct() {
     if (!open_ || busy) return;
     busy = true; clearTimers();
     var id = open_, cell = srcCell;
+    open_ = null;
+    back.classList.remove("on");
     product.scrollTop = 0; panel.scrollTop = 0;
 
     var from = stage.getBoundingClientRect();
     var shownSrc = (front && (front.currentSrc || front.getAttribute("src"))) || M[id].tile;
 
-    /* Зеркало открытия, шаг 1: клон встаёт ровно на место кадра в сцене.
-       Картинка та же самая, прямоугольник тот же — подмены не видно. */
-    flipImg.src = shownSrc;
-    placeFlip(from);
-    flip.style.opacity = "1";
-    flip.getBoundingClientRect();
+    /* Зеркало открытия. Карточку уводим только после того, как клон
+       реально готов — иначе на телефоне будет пустой кадр или блик. */
+    armFlip(shownSrc, function () {
+      placeFlip(from);
+      flip.style.opacity = "1";
+      flip.getBoundingClientRect();
 
-    /* шаг 2: карточка уходит — панель вправо, фон растворяется, сетка проступает */
-    product.classList.remove("on");
-    product.classList.add("closing");
-    back.classList.remove("on");
-    open_ = null;
-    document.documentElement.classList.remove("lock");
+      // кадр сцены прячем в том же кадре, что показываем клон
+      if (front) paint(front, "0", 0);
+      if (back_) paint(back_, "0", 0);
 
-    // rect плитки меряем после снятия блокировки, иначе промах
-    var to = cell ? $("img", cell).getBoundingClientRect() : null;
+      product.classList.remove("on");
+      product.classList.add("closing");
+      document.documentElement.classList.remove("lock");
 
-    if (to && to.width) {
-      /* шаг 3: клон летит обратно в плитку зеркальной кривой */
-      flip.style.transition = "transform 700ms cubic-bezier(.8,0,.38,.97)";
-      applyDelta(delta(to, from));
+      // rect плитки меряем после снятия блокировки, иначе промах
+      var to = cell ? cell.getBoundingClientRect() : null;
 
-      /* шаг 4: на посадке плитка возвращается на место, клон растворяется */
+      if (to && to.width) {
+        flip.style.transition = "transform 700ms cubic-bezier(.8,0,.38,.97)";
+        applyDelta(delta(to, from));
+        flipTimers.push(setTimeout(function () {
+          if (cell) cell.classList.remove("hidden");
+          fadeFlipOut(220);
+          flipTimers.push(setTimeout(resetFlip, 300));
+        }, 640));
+      } else {
+        $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
+        resetFlip();
+      }
+
       flipTimers.push(setTimeout(function () {
-        if (cell) cell.classList.remove("hidden");
-        fadeFlipOut(220);
-        flipTimers.push(setTimeout(resetFlip, 300));
-      }, 640));
-    } else {
-      $$(".cell").forEach(function (c) { c.classList.remove("hidden"); });
-      resetFlip();
-    }
+        product.classList.remove("closing");
+        busy = false;
+      }, 430));
+    });
 
-    flipTimers.push(setTimeout(function () {
-      product.classList.remove("closing");
-      busy = false;
-    }, 430));
     if (location.hash) history.pushState({}, "", location.pathname);
   }
 

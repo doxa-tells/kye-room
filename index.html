@@ -155,28 +155,29 @@ h2 em{font-style:italic;color:var(--sand)}
 @media(max-width:760px){.spec{grid-template-columns:30px 1fr;gap:8px 16px}.spec p{grid-column:2}}
 
 /* ============ CATALOG GRID ============ */
-#catalog{padding:clamp(60px,8vh,110px) 0 0}
+#catalog{padding:clamp(60px,8vh,110px) 0 0;overflow:hidden}
 .cat-head{display:flex;justify-content:space-between;align-items:flex-end;gap:26px;margin-bottom:clamp(32px,5vh,56px)}
+@media(max-width:760px){.cat-head{flex-direction:column;align-items:flex-start;gap:18px}.cat-head .lead{max-width:100%}}
 .grid{
   display:grid;grid-template-columns:repeat(5,1fr);
-  border-top:1px solid var(--line-2);border-left:1px solid var(--line-2);
+  gap:1px;background:rgba(242,236,226,.1);
+  border-top:1px solid rgba(242,236,226,.1);border-bottom:1px solid rgba(242,236,226,.1);
 }
 @media(max-width:1360px){.grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:1040px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
 .cell{
   position:relative;aspect-ratio:4/3;overflow:hidden;
-  border-right:1px solid var(--line-2);border-bottom:1px solid var(--line-2);
   background:var(--bg-2);cursor:pointer;
 }
 .cell img{
   width:100%;height:100%;object-fit:cover;
-  transform:scale(.82);opacity:.78;
-  transition:transform .9s var(--ease),opacity .6s var(--ease);
+  transform:scale(1);opacity:.86;
+  transition:transform 1.1s var(--ease),opacity .5s var(--ease);
   backface-visibility:hidden;
 }
 .cell:hover img{will-change:transform}
-.cell:hover img{transform:scale(.92);opacity:1}
+.cell:hover img{transform:scale(1.07);opacity:1}
 .cell::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:52%;pointer-events:none;
   background:linear-gradient(to top,rgba(8,8,7,.85),rgba(8,8,7,.35) 45%,transparent);
@@ -265,9 +266,7 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
 #product.closing{opacity:0;transition:opacity .38s var(--ease)}
 #product.closing .pv-panel{transform:translateX(100%);transition:transform .45s var(--ease)}
 #product.closing .pv-nav{opacity:0;transition:opacity .2s var(--ease)}
-/* фото убираем сразу — его роль на закрытии играет летящий клон,
-   тогда гаснет только дешёвая заливка, а не картинка 1800px */
-#product.closing .pv-stage .shot{opacity:0!important;transition:none}
+
 .pv-bg{
   position:absolute;inset:0;background:var(--bg);
   opacity:0;transition:opacity .34s var(--ease);
