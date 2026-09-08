@@ -203,8 +203,9 @@ h2 em{font-style:italic;color:var(--sand)}
 @media(max-width:760px){.cat-head{flex-direction:column;align-items:flex-start;gap:18px}.cat-head .lead{max-width:100%}}
 .grid{
   display:grid;grid-template-columns:repeat(5,1fr);
-  /* просвет фоном страницы: плитки дышат, глаз не рябит от стыков */
-  gap:clamp(5px,.5vw,9px);
+  /* по горизонтали держим плотно, по вертикали даём место подписи */
+  column-gap:clamp(8px,.8vw,14px);
+  row-gap:clamp(16px,1.6vw,24px);
 }
 @media(max-width:1360px){.grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:1040px){.grid{grid-template-columns:repeat(3,1fr)}}
@@ -222,30 +223,22 @@ h2 em{font-style:italic;color:var(--sand)}
   transition:transform 1.1s var(--ease),opacity .5s var(--ease);
   backface-visibility:hidden;
 }
-.cell:hover img{will-change:transform}
-.cell:hover img{transform:scale(1.07);opacity:1}
-.cell::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:52%;pointer-events:none;
-  background:linear-gradient(to top,rgba(8,8,7,.85),rgba(8,8,7,.35) 45%,transparent);
-  opacity:0;transition:opacity .55s var(--ease);
+.card:hover .cell img{will-change:transform;transform:scale(1.07);opacity:1}
+.card{cursor:pointer}
+/* подпись под плиткой */
+.cap{padding:10px 4px 0;text-align:center;pointer-events:none}
+.cap b{
+  display:block;font-family:var(--display);font-weight:300;
+  font-size:clamp(10px,.8vw,12.5px);letter-spacing:.22em;text-indent:.22em;
+  color:var(--ink);transition:color .4s var(--ease);
 }
-.cell:hover::after{opacity:1}
-.cell .lbl,.cell .tag{z-index:2}
-.cell .lbl{
-  position:absolute;left:0;right:0;bottom:16px;text-align:center;
-  font-family:var(--display);font-weight:300;font-size:clamp(13px,1.15vw,17px);letter-spacing:.3em;text-indent:.3em;
-  opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease),transform .5s var(--ease);
-  pointer-events:none;text-shadow:0 2px 20px rgba(0,0,0,.6);
+.cap span{
+  display:block;margin-top:5px;
+  font-size:clamp(8.5px,.66vw,10.5px);letter-spacing:.09em;
+  color:var(--clay);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.cell .tag{
-  position:absolute;left:0;right:0;bottom:16px;text-align:center;
-  font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--sand);opacity:0;transform:translateY(8px);
-  transition:opacity .5s var(--ease) .05s,transform .5s var(--ease) .05s;pointer-events:none;
-  text-shadow:0 2px 16px rgba(0,0,0,.7);
-}
-.cell:hover .lbl{opacity:1;transform:translateY(-18px)}
-.cell:hover .tag{opacity:1;transform:none}
+.card:hover .cap b{color:var(--sand)}
+.cell.hidden ~ .cap{visibility:hidden}
 .cell.hidden{visibility:hidden}
 
 /* fabrics of the same model, inside the panel */

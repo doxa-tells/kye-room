@@ -154,22 +154,50 @@
     im.src = M[id].nature[0];
     if (im.decode) im.decode().catch(function () {});
   }
+  /* минимальная цена модели: считаем по канонному прайсу, он есть всегда */
+  function minPrice(m) {
+    var nums = [];
+    (m.prices || []).forEach(function (p) {
+      var mm = String(p[1]).match(/\d[\d\s\u00a0]*/g);
+      if (mm) mm.forEach(function (x) {
+        var n = parseInt(x.replace(/\D/g, ""), 10);
+        if (n > 0) nums.push(n);
+      });
+    });
+    return nums.length ? Math.min.apply(null, nums) : 0;
+  }
+  function priceLabel(m) {
+    var n = minPrice(m); if (!n) return "";
+    var v = String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " \u20b8";
+    /* в казахском «от» идёт послелогом, поэтому отдельная ветка */
+    return lang === "kz" ? v + "-ден бастап" : t("from") + " " + v;
+  }
+
   function renderGrid() {
     grid.innerHTML = "";
     K.items.forEach(function (it) {
       var m = modelOf(it);
+      var card = el("div", "card");
+
       var c = el("div", "cell"); c.dataset.id = it.id;
       var im = el("img");
       im.src = M[it.id].tile; im.alt = title(m) + " — " + it[lang].variant;
       im.loading = "lazy"; im.decoding = "async";
       c.appendChild(im);
-      c.appendChild(el("div", "tag", it[lang].variant));
-      c.appendChild(el("div", "lbl", title(m)));
+      card.appendChild(c);
+
+      /* подпись под плиткой: модель, ткань и цена «от» — мелким шрифтом */
+      var cap = el("div", "cap");
+      cap.appendChild(el("b", null, title(m)));
+      var pr = priceLabel(m);
+      cap.appendChild(el("span", null, pr ? it[lang].variant + " · " + pr : it[lang].variant));
+      card.appendChild(cap);
+
       function warm() { warmUp(it.id); }
-      c.addEventListener("mouseenter", warm);
-      c.addEventListener("touchstart", warm, { passive: true });
-      c.addEventListener("click", function () { openProduct(it.id, c); });
-      grid.appendChild(c);
+      card.addEventListener("mouseenter", warm);
+      card.addEventListener("touchstart", warm, { passive: true });
+      card.addEventListener("click", function () { openProduct(it.id, c); });
+      grid.appendChild(card);
     });
   }
 

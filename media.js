@@ -26,8 +26,7 @@ window.KYE_MEDIA = {
    "media/nature/queen.webp"
   ],
   "room": [
-   "media/room/queen-1.webp",
-   "media/room/queen-2.webp"
+   "media/room/queen-1.webp"
   ]
  },
  "tadj": {
@@ -37,8 +36,7 @@ window.KYE_MEDIA = {
    "media/nature/tadj.webp"
   ],
   "room": [
-   "media/room/tadj-1.webp",
-   "media/room/tadj-2.webp"
+   "media/room/tadj-1.webp"
   ]
  },
  "blanca-terra": {
@@ -48,8 +46,7 @@ window.KYE_MEDIA = {
    "media/nature/blanca-terra.webp"
   ],
   "room": [
-   "media/room/blanca-terra-1.webp",
-   "media/room/blanca-terra-2.webp"
+   "media/room/blanca-terra-1.webp"
   ]
  },
  "blanca-powder": {
@@ -99,8 +96,7 @@ window.KYE_MEDIA = {
    "media/nature/moon.webp"
   ],
   "room": [
-   "media/room/moon-1.webp",
-   "media/room/moon-2.webp"
+   "media/room/moon-1.webp"
   ]
  },
  "ostin-milk": {
@@ -130,8 +126,7 @@ window.KYE_MEDIA = {
    "media/nature/west.webp"
   ],
   "room": [
-   "media/room/west-1.webp",
-   "media/room/west-2.webp"
+   "media/room/west-1.webp"
   ]
  },
  "san-dune": {
@@ -201,8 +196,7 @@ window.KYE_MEDIA = {
    "media/nature/love.webp"
   ],
   "room": [
-   "media/room/love-1.webp",
-   "media/room/love-2.webp"
+   "media/room/love-1.webp"
   ]
  },
  "king": {
@@ -212,8 +206,7 @@ window.KYE_MEDIA = {
    "media/nature/king.webp"
   ],
   "room": [
-   "media/room/king-1.webp",
-   "media/room/king-2.webp"
+   "media/room/king-1.webp"
   ]
  },
  "pink": {
@@ -223,8 +216,7 @@ window.KYE_MEDIA = {
    "media/nature/pink.webp"
   ],
   "room": [
-   "media/room/pink-1.webp",
-   "media/room/pink-2.webp"
+   "media/room/pink-1.webp"
   ]
  },
  "pouf-set": {
@@ -254,8 +246,7 @@ window.KYE_MEDIA = {
    "media/nature/pillow.webp"
   ],
   "room": [
-   "media/room/pillow-1.webp",
-   "media/room/pillow-2.webp"
+   "media/room/pillow-1.webp"
   ]
  }
 };
