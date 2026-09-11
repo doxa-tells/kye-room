@@ -95,7 +95,7 @@ window.KYE = {
   story: [
     {
       id: "about",
-      photos: ["media/story/brand-1.webp"],
+      photos: ["media/nature/diva-indienne.webp"],
       cta: "#catalog",
       kz: {
         eyebrow: "Бренд",
@@ -128,25 +128,25 @@ window.KYE = {
       cta: "#contact",
       kz: {
         eyebrow: "Өндіріс",
-        title: "Еуропа маталары<br><em>ЧПУ-мен кесілген қаңқа</em>",
+        title: "Еуропа маталары<br><em>қаңқа ЧПУ станогында кесіледі</em>",
         body: "Англия, Франция, Италия, Бельгия және Түркияның үздік мануфактуралары. Тек зығыр мен мақта: беріктік пен асыл фактура. Қаңқа ЧПУ-да миллиметрдің оннан бір бөлігіне дейінгі дәлдікпен кесіледі, қаптаманы алғашқы тігістен соңғысына дейін бір шебер жүргізеді. Маталар 40 000 Мартиндейл циклінен асады, конструкцияға — бес жыл кепілдік.",
         cta: "Өтінім қалдыру"
       },
       es: {
         eyebrow: "Taller",
-        title: "Telas de Europa<br><em>estructura cortada a CNC</em>",
+        title: "Telas de Europa<br><em>la estructura se corta en CNC</em>",
         body: "Inglaterra, Francia, Italia, Bélgica y las mejores manufacturas turcas. Solo lino y algodón: resistencia y un tacto noble. La estructura se corta a CNC con una precisión de una décima de milímetro y un mismo artesano lleva la tapicería de la primera costura a la última. Las telas superan los 40 000 ciclos Martindale y la estructura tiene cinco años de garantía.",
         cta: "Solicitar información"
       },
       ru: {
         eyebrow: "Производство",
-        title: "Ткани из Европы<br><em>каркас на ЧПУ</em>",
+        title: "Ткани из Европы<br><em>каркас режется на станке ЧПУ</em>",
         body: "Англия, Франция, Италия, Бельгия и лучшие турецкие мануфактуры. Только лён и хлопок: прочность и благородная фактура. Каркас режется на ЧПУ с точностью до десятой миллиметра, обивку от первого шва до последнего ведёт один мастер. Ткани держат от 40 000 циклов Мартиндейла, на конструкцию — пять лет гарантии.",
         cta: "Оставить заявку"
       },
       en: {
         eyebrow: "Craft",
-        title: "European cloth<br><em>CNC-cut frame</em>",
+        title: "European cloth<br><em>the frame is cut on a CNC machine</em>",
         body: "England, France, Italy, Belgium and the best Turkish mills. Linen and cotton only: strength and a noble hand. The frame is CNC-cut to a tenth of a millimetre, and one craftsman carries the upholstery from first seam to last. Fabrics hold from 40,000 Martindale cycles, five years of structural warranty.",
         cta: "Make an enquiry"
       }
