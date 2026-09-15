@@ -167,7 +167,7 @@ window.KYE = {
     phone: "+7 702 199 09 95", tel: "+77021990995",
     whatsapp: "+7 708 081 0995", whatsapp_tel: "77080810995",
     instagram: "@kye.room", instagram_url: "https://instagram.com/kye.room",
-    lead_endpoint: ""
+    lead_endpoint: "https://script.google.com/macros/s/AKfycbzrz61iiE9E6QIHwl1UP7SZ-TJc7LHXHBYnM7QSTx_9Qub35rVvRccTIfw1V1sBtYtJ/exec"
   },
 
   /* ---------- МОДЕЛИ: общее описание и прайс ---------- */
