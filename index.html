@@ -241,6 +241,16 @@ h2 em{font-style:italic;color:var(--sand)}
 .cell.hidden ~ .cap{visibility:hidden}
 .cell.hidden{visibility:hidden}
 
+/* honeypot: поле видят только боты */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.f-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn-wa{
+  display:inline-flex;align-items:center;justify-content:center;
+  border-color:rgba(242,236,226,.22);color:var(--dim);
+}
+.btn-wa:hover{color:var(--ink)}
+@media(max-width:520px){.f-row{flex-direction:column;align-items:stretch}.f-row .btn{width:100%}}
+
 /* fabrics of the same model, inside the panel */
 .sibs{margin-bottom:30px}
 .sibs-h{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);margin-bottom:14px}
@@ -504,7 +514,11 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
         <div class="field"><input type="text" id="fn" placeholder=" " required><label for="fn" data-t="form_name">Имя</label></div>
         <div class="field"><input type="tel" id="fp" placeholder=" " required><label for="fp" data-t="form_phone">Телефон</label></div>
         <div class="field"><textarea id="fm" rows="2" placeholder=" "></textarea><label for="fm" data-t="form_msg">Модель, размер, ткань</label></div>
-        <button type="submit" class="btn" data-t="form_send">Отправить</button>
+        <div class="hp" aria-hidden="true"><input type="text" id="fc" name="company" tabindex="-1" autocomplete="off"></div>
+        <div class="f-row">
+          <button type="submit" class="btn" id="fsend" data-t="form_send">Отправить</button>
+          <a class="btn btn-wa" id="fwa" href="#" target="_blank" rel="noopener" data-t="form_wa">Написать в WhatsApp</a>
+        </div>
         <div class="ok" id="ok" data-t="form_ok">Спасибо.</div>
       </form>
     </div>

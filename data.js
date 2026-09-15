@@ -21,7 +21,9 @@ window.KYE = {
       other: "Другие ткани этой модели", from: "от",
       photo_hint: "Место под фото<br>основателей за работой",
       form_name: "Имя", form_phone: "Телефон", form_msg: "Модель, размер, ткань",
-      form_send: "Отправить", form_ok: "Спасибо. Мы свяжемся с вами в течение дня.",
+      form_send: "Отправить", form_wa: "Написать в WhatsApp",
+      form_sending: "Отправляем", form_err: "Не отправилось. Напишите нам в WhatsApp.",
+      form_ok: "Спасибо. Мы свяжемся с вами в течение дня.",
       c_show_v: "Шоурум по записи · ежедневно 11:00 — 20:00",
       c_ship_v: "Доставка по Казахстану и СНГ · сборка на месте"
     },
@@ -41,7 +43,9 @@ window.KYE = {
       other: "Осы модельдің басқа маталары", from: "",
       photo_hint: "Құрылтайшылардың жұмыс үстіндегі<br>фотосына арналған орын",
       form_name: "Аты", form_phone: "Телефон", form_msg: "Модель, өлшем, мата",
-      form_send: "Жіберу", form_ok: "Рақмет. Күн ішінде сізбен хабарласамыз.",
+      form_send: "Жіберу", form_wa: "WhatsApp-қа жазу",
+      form_sending: "Жіберілуде", form_err: "Жіберілмеді. Бізге WhatsApp арқылы жазыңыз.",
+      form_ok: "Рақмет. Күн ішінде сізбен хабарласамыз.",
       c_show_v: "Шоурум алдын ала жазылу бойынша · күн сайын 11:00 — 20:00",
       c_ship_v: "Қазақстан және ТМД бойынша жеткізу · орнында жинау"
     },
@@ -61,7 +65,9 @@ window.KYE = {
       other: "Otras telas de este modelo", from: "desde",
       photo_hint: "Espacio para la foto<br>de los fundadores trabajando",
       form_name: "Nombre", form_phone: "Teléfono", form_msg: "Modelo, medida, tela",
-      form_send: "Enviar", form_ok: "Gracias. Le escribiremos a lo largo del día.",
+      form_send: "Enviar", form_wa: "Escríbanos por WhatsApp",
+      form_sending: "Enviando", form_err: "No se ha enviado. Escríbanos por WhatsApp.",
+      form_ok: "Gracias. Le escribiremos a lo largo del día.",
       c_show_v: "Showroom con cita previa · todos los días de 11:00 a 20:00",
       c_ship_v: "Envío a Kazajistán y la CEI · montaje en destino"
     },
@@ -81,7 +87,9 @@ window.KYE = {
       other: "Other fabrics of this model", from: "from",
       photo_hint: "Photo slot<br>founders at work",
       form_name: "Name", form_phone: "Phone", form_msg: "Model, size, fabric",
-      form_send: "Send", form_ok: "Thank you. We will be in touch within a day.",
+      form_send: "Send", form_wa: "Message us on WhatsApp",
+      form_sending: "Sending", form_err: "That did not send. Please message us on WhatsApp.",
+      form_ok: "Thank you. We will be in touch within a day.",
       c_show_v: "Showroom by appointment · daily 11:00 — 20:00",
       c_ship_v: "Delivery across Kazakhstan and the CIS · assembled on site"
     }
@@ -153,7 +161,14 @@ window.KYE = {
     }
   ],
 
-  contact: { phone: "+7 702 199 09 95", tel: "+77021990995", instagram: "@kye.room", instagram_url: "https://instagram.com/kye.room" },
+  /* lead_endpoint — адрес веб-приложения Apps Script, который пишет заявки
+     в Google-таблицу. Пока пустой, форма уводит в WhatsApp. */
+  contact: {
+    phone: "+7 702 199 09 95", tel: "+77021990995",
+    whatsapp: "+7 708 081 0995", whatsapp_tel: "77080810995",
+    instagram: "@kye.room", instagram_url: "https://instagram.com/kye.room",
+    lead_endpoint: ""
+  },
 
   /* ---------- МОДЕЛИ: общее описание и прайс ---------- */
   models: {

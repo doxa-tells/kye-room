@@ -95,13 +95,26 @@
 
   function renderContact() {
     var c = K.contact;
-    // без подписей: телефон и ник говорят сами за себя,
+    // без подписей: телефон, WhatsApp и ник говорят сами за себя,
     // а строки про шоурум и доставку названы прямо внутри текста
     $("#cInfo").innerHTML =
       '<div class="info-row lead-row"><a href="tel:' + c.tel + '">' + c.phone + "</a></div>" +
+      '<div class="info-row lead-row"><a href="' + waLink() + '" target="_blank" rel="noopener">WhatsApp ' + c.whatsapp + "</a></div>" +
       '<div class="info-row lead-row"><a href="' + c.instagram_url + '" target="_blank" rel="noopener">' + c.instagram + "</a></div>" +
       '<div class="info-row"><p>' + t("c_show_v") + "</p></div>" +
       '<div class="info-row"><p>' + t("c_ship_v") + "</p></div>";
+  }
+
+  /* ссылка в WhatsApp: если форма уже заполнена, переносим текст в сообщение */
+  function waLink() {
+    var n = ($("#fn") || {}).value || "", ph = ($("#fp") || {}).value || "", m = ($("#fm") || {}).value || "";
+    var hello = { ru: "Здравствуйте! ", kz: "Сәлеметсіз бе! ", en: "Hello! ", es: "¡Hola! " }[lang];
+    var about = { ru: "Интересует кровать KYE ROOM.", kz: "KYE ROOM кереуеті қызықтырады.",
+                  en: "I am interested in a KYE ROOM bed.", es: "Me interesa una cama de KYE ROOM." }[lang];
+    var txt = hello + about;
+    if (m.trim()) txt += " " + m.trim();
+    if (n.trim()) txt += " (" + n.trim() + (ph.trim() ? ", " + ph.trim() : "") + ")";
+    return "https://wa.me/" + K.contact.whatsapp_tel + "?text=" + encodeURIComponent(txt);
   }
 
   function applyLang() {
@@ -640,11 +653,58 @@
   }
 
   /* ---------------- FORM ---------------- */
+  /* Заявка уходит POST-ом в веб-приложение Apps Script, которое пишет строку
+     в Google-таблицу. Тип text/plain — чтобы браузер не слал preflight;
+     no-cors — чтобы не упереться в заголовки Apps Script. Ответ прочитать
+     нельзя, поэтому успех показываем оптимистично, а на отказ сети уводим
+     в WhatsApp: лид не должен теряться. */
+  var sending = false;
   $("#f").addEventListener("submit", function (e) {
     e.preventDefault();
-    $("#ok").style.display = "block";
-    setTimeout(function () { e.target.reset(); }, 100);
+    if (sending) return;
+    if ($("#fc").value) return;            // honeypot: это бот
+
+    var btn = $("#fsend"), url = K.contact.lead_endpoint;
+    var data = {
+      name: $("#fn").value.trim(),
+      phone: $("#fp").value.trim(),
+      message: $("#fm").value.trim(),
+      lang: lang,
+      page: location.href,
+      ref: document.referrer || "",
+      ts: new Date().toISOString()
+    };
+
+    function done() {
+      $("#ok").textContent = t("form_ok");
+      $("#ok").style.display = "block";
+      $("#f").reset();
+      btn.textContent = t("form_send");
+      sending = false;
+    }
+    function fail() {
+      $("#ok").textContent = t("form_err");
+      $("#ok").style.display = "block";
+      btn.textContent = t("form_send");
+      sending = false;
+      window.open(waLink(), "_blank", "noopener");
+    }
+
+    if (!url) { window.open(waLink(), "_blank", "noopener"); done(); return; }
+
+    sending = true;
+    btn.textContent = t("form_sending");
+    fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data)
+    }).then(done).catch(fail);
   });
+
+  /* кнопка WhatsApp собирает ссылку в момент клика, чтобы подхватить форму */
+  $("#fwa").addEventListener("click", function () { this.href = waLink(); });
+
 
   /* ---------------- GO ---------------- */
   syncCellAspect();
