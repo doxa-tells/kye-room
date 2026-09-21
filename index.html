@@ -241,6 +241,53 @@ h2 em{font-style:italic;color:var(--sand)}
 .cell.hidden ~ .cap{visibility:hidden}
 .cell.hidden{visibility:hidden}
 
+/* ============ ЗАЯВКА С КАРТОЧКИ ============
+   Лежит выше карточки товара (z-index 80) и кнопки «назад» (95). */
+#lead{
+  position:fixed;inset:0;z-index:120;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(8,8,7,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  opacity:0;visibility:hidden;transition:opacity .45s var(--ease),visibility .45s var(--ease);
+}
+#lead.on{opacity:1;visibility:visible}
+.lead-sheet{
+  position:relative;width:min(440px,100%);
+  background:var(--bg-2);border:1px solid var(--line-2);
+  border-radius:var(--r-stage);
+  padding:clamp(26px,3vw,38px) clamp(22px,2.6vw,34px) clamp(24px,2.8vw,32px);
+  transform:translateY(18px) scale(.98);
+  transition:transform .5s var(--ease);
+  box-shadow:0 40px 100px rgba(0,0,0,.6);
+}
+#lead.on .lead-sheet{transform:none}
+.lead-x{
+  position:absolute;right:12px;top:12px;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;color:var(--dim);
+  transition:color .3s;border-radius:50%;
+}
+.lead-x:hover{color:var(--ink)}
+.lead-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.4}
+.lead-model{
+  font-size:9px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--clay);margin-bottom:12px;padding-right:34px;
+}
+.lead-h{
+  font-family:var(--display);font-weight:200;
+  font-size:clamp(21px,2.2vw,27px);line-height:1.15;
+  margin-bottom:clamp(20px,2.4vw,26px);
+}
+#lead .field{margin-bottom:18px}
+#lead .btn{width:100%;margin-top:6px}
+.lead-note{
+  margin-top:14px;font-size:11px;line-height:1.55;
+  color:rgba(242,236,226,.38);text-align:center;
+}
+.lead-note.err{color:var(--sand)}
+@media(max-width:520px){
+  #lead{align-items:flex-end;padding:0}
+  .lead-sheet{width:100%;border-radius:var(--r-stage) var(--r-stage) 0 0;border-bottom:0;padding-bottom:30px}
+}
+
 /* honeypot: поле видят только боты */
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .f-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
@@ -547,6 +594,22 @@ footer{padding:34px 0 40px;border-top:1px solid var(--line-2)}
   <aside class="pv-panel" id="panel"></aside>
 </div>
 <button class="pv-back" id="back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg><span data-t="back">К каталогу</span></button>
+
+<!-- ============ ЗАЯВКА С КАРТОЧКИ ============ -->
+<div id="lead" role="dialog" aria-modal="true" aria-labelledby="leadH">
+  <div class="lead-sheet">
+    <button class="lead-x" id="leadX" aria-label="close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="lead-model" id="leadModel"></div>
+    <h3 class="lead-h" id="leadH" data-t="lead_title">Оставить заявку</h3>
+    <form id="lf" novalidate>
+      <div class="field"><input type="text" id="lfn" placeholder=" " required><label for="lfn" data-t="form_name">Имя</label></div>
+      <div class="field"><input type="tel" id="lfp" placeholder=" " required><label for="lfp" data-t="form_phone">Телефон</label></div>
+      <div class="hp" aria-hidden="true"><input type="text" id="lfc" tabindex="-1" autocomplete="off"></div>
+      <button type="submit" class="btn" id="lfsend" data-t="lead_send">Отправить и перейти в WhatsApp</button>
+      <p class="lead-note" id="leadNote" data-t="lead_note">После отправки откроется WhatsApp с готовым сообщением.</p>
+    </form>
+  </div>
+</div>
 
 <div id="flip"><img alt=""></div>
 

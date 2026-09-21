@@ -79,16 +79,6 @@ window.KYE_MEDIA = {
    "media/room/luma-teal-1.webp"
   ]
  },
- "luma-night": {
-  "model": "luma",
-  "tile": "media/tile/luma-night.webp",
-  "nature": [
-   "media/nature/luma-night.webp"
-  ],
-  "room": [
-   "media/room/luma-night-1.webp"
-  ]
- },
  "moon": {
   "model": "moon",
   "tile": "media/tile/moon.webp",
@@ -157,16 +147,6 @@ window.KYE_MEDIA = {
   ],
   "room": [
    "media/room/rumi-wine-1.webp"
-  ]
- },
- "rumi-indigo": {
-  "model": "rumi",
-  "tile": "media/tile/rumi-indigo.webp",
-  "nature": [
-   "media/nature/rumi-indigo.webp"
-  ],
-  "room": [
-   "media/room/rumi-indigo-1.webp"
   ]
  },
  "diva-indienne": {

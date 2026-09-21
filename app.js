@@ -105,16 +105,40 @@
       '<div class="info-row"><p>' + t("c_ship_v") + "</p></div>";
   }
 
-  /* ссылка в WhatsApp: если форма уже заполнена, переносим текст в сообщение */
-  function waLink() {
-    var n = ($("#fn") || {}).value || "", ph = ($("#fp") || {}).value || "", m = ($("#fm") || {}).value || "";
+  /* Ссылка в WhatsApp с готовым текстом. Без аргументов берёт нижнюю форму,
+     с аргументами — данные заявки с карточки. */
+  function waLink(p) {
+    p = p || {};
+    var val = function (k, sel) {
+      return String(p[k] != null ? p[k] : (($(sel) || {}).value || "")).trim();
+    };
+    var n = val("name", "#fn"), ph = val("phone", "#fp"), note = val("note", "#fm");
     var hello = { ru: "Здравствуйте! ", kz: "Сәлеметсіз бе! ", en: "Hello! ", es: "¡Hola! " }[lang];
     var about = { ru: "Интересует кровать KYE ROOM.", kz: "KYE ROOM кереуеті қызықтырады.",
                   en: "I am interested in a KYE ROOM bed.", es: "Me interesa una cama de KYE ROOM." }[lang];
     var txt = hello + about;
-    if (m.trim()) txt += " " + m.trim();
-    if (n.trim()) txt += " (" + n.trim() + (ph.trim() ? ", " + ph.trim() : "") + ")";
+    if (note) txt += " " + note;
+    if (n) txt += " (" + n + (ph ? ", " + ph : "") + ")";
     return "https://wa.me/" + K.contact.whatsapp_tel + "?text=" + encodeURIComponent(txt);
+  }
+
+  /* Одна точка отправки: и нижняя форма, и заявка с карточки идут сюда.
+     text/plain — чтобы браузер не слал preflight; no-cors — чтобы не упереться
+     в заголовки Apps Script. Ответ прочитать нельзя, поэтому успех считаем
+     по факту ухода запроса. */
+  function sendLead(data) {
+    var url = K.contact.lead_endpoint;
+    data.lang = lang;
+    data.page = location.href;
+    data.ref = document.referrer || "";
+    data.ts = new Date().toISOString();
+    if (!url) return Promise.resolve(false);
+    return fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data)
+    }).then(function () { return true; });
   }
 
   function applyLang() {
@@ -344,31 +368,32 @@
       var val = (p[1].indexOf("₸") > -1) ? p[1] : p[1] + " ₸";
       b1i.appendChild(el("div", "prow", "<span>" + p[0] + "</span><b>" + val + "</b>"));
     });
-    b1i.appendChild(el("p", "note", t("custom")));
     b1.appendChild(b1i); a1.appendChild(b1);
     panel.appendChild(a1);
 
-    var a2 = el("div", "acc");
-    a2.appendChild(accHead(t("details")));
-    var b2 = el("div", "acc-b"), b2i = el("div", "acc-b-in");
+    /* Характеристики: цена от ткани, подъёмный механизм, матрас.
+       К пуфам и подушкам (lift === null) ничего из этого не относится —
+       тогда блок просто не показываем, пустой аккордеон хуже, чем никакого. */
     var det = [];
-    if (m.lift === true) det.push(t("lift_yes"));
-    if (m.lift === false) det.push(t("lift_no"));
-    det.push(t("no_mattress"));
-    det.forEach(function (d) { b2i.appendChild(el("p", "note", d)); });
-    b2.appendChild(b2i); a2.appendChild(b2);
-    panel.appendChild(a2);
+    if (m.lift !== null) {
+      det.push(t("fabric_price"));
+      if (m.lift === true) det.push(t("lift_yes"));
+      if (m.lift === false) det.push(t("lift_no"));
+      det.push(t("no_mattress"));
+    }
+    if (det.length) {
+      var a2 = el("div", "acc");
+      a2.appendChild(accHead(t("details")));
+      var b2 = el("div", "acc-b"), b2i = el("div", "acc-b-in");
+      det.forEach(function (d) { b2i.appendChild(el("p", "note", d)); });
+      b2.appendChild(b2i); a2.appendChild(b2);
+      panel.appendChild(a2);
+    }
 
     var cta = el("div", "pv-cta");
     var btn = el("button", "btn", t("request"));
     btn.addEventListener("click", function () {
-      var label = title(m) + " · " + L.variant;
-      closeProduct();
-      setTimeout(function () {
-        $("#fm").value = ({ ru: "Модель ", kz: "Модель ", en: "Model ", es: "Modelo " }[lang]) + label;
-        $("#contact").scrollIntoView({ behavior: "smooth" });
-        setTimeout(function () { $("#fn").focus(); }, 700);
-      }, 620);
+      leadOpen(title(m) + " · " + L.variant);
     });
     cta.appendChild(btn);
     panel.appendChild(cta);
@@ -623,6 +648,10 @@
     step(1);
   });
   document.addEventListener("keydown", function (e) {
+    if (lead.classList.contains("on")) {
+      if (e.key === "Escape") leadClose();
+      return;                              // стрелки не должны листать кадры из-под формы
+    }
     if (!open_) return;
     if (e.key === "Escape") closeProduct();
     if (e.key === "ArrowRight") step(1);
@@ -664,42 +693,78 @@
     if (sending) return;
     if ($("#fc").value) return;            // honeypot: это бот
 
-    var btn = $("#fsend"), url = K.contact.lead_endpoint;
-    var data = {
-      name: $("#fn").value.trim(),
-      phone: $("#fp").value.trim(),
-      message: $("#fm").value.trim(),
-      lang: lang,
-      page: location.href,
-      ref: document.referrer || "",
-      ts: new Date().toISOString()
-    };
+    var btn = $("#fsend"), ok = $("#ok");
+    var data = { name: $("#fn").value.trim(), phone: $("#fp").value.trim(), message: $("#fm").value.trim() };
 
     function done() {
-      $("#ok").textContent = t("form_ok");
-      $("#ok").style.display = "block";
-      $("#f").reset();
-      btn.textContent = t("form_send");
-      sending = false;
+      ok.textContent = t("form_ok"); ok.style.display = "block";
+      $("#f").reset(); btn.textContent = t("form_send"); sending = false;
     }
     function fail() {
-      $("#ok").textContent = t("form_err");
-      $("#ok").style.display = "block";
-      btn.textContent = t("form_send");
-      sending = false;
-      window.open(waLink(), "_blank", "noopener");
+      ok.textContent = t("form_err"); ok.style.display = "block";
+      btn.textContent = t("form_send"); sending = false;
+      window.open(waLink(), "_blank");
     }
 
-    if (!url) { window.open(waLink(), "_blank", "noopener"); done(); return; }
+    if (!K.contact.lead_endpoint) { window.open(waLink(), "_blank"); done(); return; }
 
     sending = true;
     btn.textContent = t("form_sending");
-    fetch(url, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(data)
-    }).then(done).catch(fail);
+    sendLead(data).then(done).catch(fail);
+  });
+
+  /* ---------------- ЗАЯВКА С КАРТОЧКИ ---------------- */
+  var lead = $("#lead"), leadLabel = "", leadSending = false;
+
+  function leadOpen(label) {
+    leadLabel = label || "";
+    $("#leadModel").textContent = leadLabel;
+    $("#leadNote").textContent = t("lead_note");
+    $("#leadNote").classList.remove("err");
+    $("#lfsend").textContent = t("lead_send");
+    lead.classList.add("on");
+    document.documentElement.classList.add("lock");
+    setTimeout(function () { $("#lfn").focus(); }, 380);
+  }
+  function leadClose() {
+    lead.classList.remove("on");
+    /* карточка товара держит свою блокировку — снимаем, только если её нет */
+    if (!open_) document.documentElement.classList.remove("lock");
+  }
+
+  $("#leadX").addEventListener("click", leadClose);
+  lead.addEventListener("click", function (e) { if (e.target === lead) leadClose(); });
+
+  $("#lf").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (leadSending) return;
+    if ($("#lfc").value) return;           // honeypot
+
+    var n = $("#lfn").value.trim(), ph = $("#lfp").value.trim(), note = $("#leadNote");
+    if (!n || !ph) {
+      note.textContent = t("lead_need");
+      note.classList.add("err");
+      (n ? $("#lfp") : $("#lfn")).focus();
+      return;
+    }
+    note.classList.remove("err");
+    leadSending = true;
+    $("#lfsend").textContent = t("form_sending");
+
+    /* Вкладку открываем синхронно с сабмитом: сделай это внутри .then() —
+       и блокировщик попапов её срежет. noopener здесь не ставим, иначе
+       window.open вернёт null и мы не узнаем, открылась ли она. */
+    var link = waLink({ name: n, phone: ph, note: leadLabel });
+    var win = window.open(link, "_blank");
+
+    var finish = function () {
+      leadSending = false;
+      $("#lfsend").textContent = t("lead_send");
+      $("#lf").reset();
+      leadClose();
+      if (!win) location.href = link;      // попап зарубили — уводим текущую вкладку
+    };
+    sendLead({ name: n, phone: ph, message: leadLabel }).then(finish, finish);
   });
 
   /* кнопка WhatsApp собирает ссылку в момент клика, чтобы подхватить форму */
