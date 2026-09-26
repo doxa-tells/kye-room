@@ -371,6 +371,81 @@ window.KYE = {
       en: { lead: "The first grown-up piece in a child's room",
             text: "A daybed with shaped sides and back in a pink-and-white stripe, piped in white along every edge. Built like adult furniture: same frame, same fabrics, same assembly — simply at another scale. The sides are high enough that no extra rail is needed." }
     },
+    headboard: {
+      name: "HEADBOARD", display: { ru: "ИЗГОЛОВЬЯ", en: "HEADBOARDS", kz: "БАС ЖАҚТАР", es: "CABECEROS" }, lift: null,
+      prices: [["90 × 200, 120 × 200","150 000"],["140 × 200, 160 × 200","200 000"],["180 × 200, 200 × 200","250 000"]],
+      price_note: {
+        ru: "Цена указана за изголовье без основания кровати.",
+        kz: "Баға кереует негізінсіз, тек бас жақ үшін көрсетілген.",
+        en: "The price is for the headboard alone, without the bed base.",
+        es: "El precio es solo del cabecero, sin la base de la cama."
+      },
+      specs: {
+        ru: ["Любая форма из коллекции", "Ткань и кант на выбор", "Крепление на стену или к готовому основанию", "Возможно изготовление по вашему референсу"],
+        kz: ["Коллекциядағы кез келген пішін", "Мата мен кант таңдау бойынша", "Қабырғаға немесе дайын негізге бекіту", "Сіздің референсіңіз бойынша жасауға болады"],
+        en: ["Any shape from the collection", "Fabric and piping to choose", "Fixed to the wall or to an existing base", "Can be made from your own reference"],
+        es: ["Cualquier forma de la colección", "Tela y ribete a elegir", "Se fija a la pared o a una base existente", "Se puede fabricar a partir de su referencia"]
+      },
+      ru: { lead: "Изголовье отдельно от кровати",
+            text: "Любой силуэт из коллекции можно заказать отдельным изголовьем — на стену или к уже готовому основанию. Ткань, кант и высота подбираются так же, как для кровати, поэтому изголовье встаёт в комнату, где менять кровать целиком не нужно или некуда." },
+      kz: { lead: "Кереуеттен бөлек бас жақ",
+            text: "Коллекциядағы кез келген силуэтті бөлек бас жақ ретінде тапсыруға болады — қабырғаға немесе дайын негізге. Мата, кант және биіктік кереуеттегідей таңдалады, сондықтан ол кереуетті түгел ауыстыру қажет емес бөлмеге де жарайды." },
+      en: { lead: "A headboard on its own",
+            text: "Any silhouette in the collection can be ordered as a headboard alone — fixed to the wall or to a base you already own. Fabric, piping and height are chosen exactly as they would be for a bed, so it works in a room where replacing the whole bed is neither needed nor possible." },
+      es: { lead: "El cabecero por separado",
+            text: "Cualquier silueta de la colección puede pedirse como cabecero suelto: fijado a la pared o a una base que ya tenga. La tela, el ribete y la altura se eligen igual que para una cama, así que encaja en una habitación donde cambiar la cama entera no hace falta o no cabe." }
+    },
+    throw: {
+      name: "THROW", display: { ru: "ПОКРЫВАЛА", en: "THROWS", kz: "КҮНПАРАЖДАР", es: "COLCHAS" }, lift: null,
+      prices: [["90 × 200, 120 × 200","150 000"],["140 × 200, 160 × 200","200 000"],["180 × 200, 200 × 200","250 000"]],
+      price_note: {
+        ru: "Размер берётся по матрасу, свес считается от высоты основания.",
+        kz: "Өлшем матрас бойынша алынады, салбырауы негіздің биіктігінен есептеледі.",
+        en: "The size follows the mattress; the drop is calculated from the height of the base.",
+        es: "La medida se toma del colchón; la caída se calcula desde la altura de la base."
+      },
+      specs: {
+        ru: ["Ткань в тон кровати, изголовья или подушек", "Размер по матрасу, свес по высоте основания", "Стёжка и кант на выбор"],
+        kz: ["Кереует, бас жақ немесе жастықтармен үндес мата", "Өлшемі матрас бойынша, салбырауы негіздің биіктігіне қарай", "Тігіс пен кант таңдау бойынша"],
+        en: ["Fabric matched to the bed, the headboard or the cushions", "Size to the mattress, drop to the height of the base", "Quilting and piping to choose"],
+        es: ["Tela a juego con la cama, el cabecero o los cojines", "Medida según el colchón, caída según la altura de la base", "Pespunte y ribete a elegir"]
+      },
+      ru: { lead: "Та же ткань, что и на кровати",
+            text: "Покрывало шьётся под конкретную кровать и чаще всего в той же ткани, что изголовье или декоративные подушки. Тогда комната собирается в один комплект, а не в набор отдельно купленных вещей." },
+      kz: { lead: "Кереуеттегідей мата",
+            text: "Күнпараж нақты кереуетке тігіледі және көбіне бас жақ пен сәндік жастықтардағы матадан жасалады. Сонда бөлме бөлек сатып алынған заттардың жиынтығы емес, бір кешен болып шығады." },
+      en: { lead: "The same cloth as the bed",
+            text: "The throw is made for one particular bed and most often in the same cloth as the headboard or the cushions. That way the room reads as one set rather than a collection of separately bought things." },
+      es: { lead: "La misma tela que la cama",
+            text: "La colcha se hace para una cama concreta y casi siempre en la misma tela que el cabecero o los cojines. Así la habitación se lee como un conjunto y no como cosas compradas por separado." }
+    },
+    banquette: {
+      name: "BANQUETTE", display: { ru: "БАНКЕТКИ", en: "BENCHES", kz: "БАНКЕТКАЛАР", es: "BANQUETAS" }, lift: null,
+      prices: [["Банкетка на заказ","от 150 000"]],
+      prices_en: [["Made-to-order bench","from 150 000"]],
+      prices_kz: [["Тапсырыспен банкетка","150 000 ₸-ден бастап"]],
+      prices_es: [["Banqueta a medida","desde 150 000"]],
+      price_note: {
+        ru: "Точная цена зависит от размера, выбранной ткани, формы и деталей изделия.",
+        kz: "Нақты баға өлшемге, таңдалған матаға, пішінге және бұйымның бөлшектеріне байланысты.",
+        en: "The exact price depends on the size, the chosen fabric, the shape and the detailing.",
+        es: "El precio exacto depende del tamaño, la tela elegida, la forma y los detalles."
+      },
+      specs: {
+        ru: ["Индивидуальный размер", "Большой выбор тканей и оттенков", "Разные формы и варианты дизайна", "Выбор ножек: форма, высота и цвет", "Возможно изготовление по вашему референсу", "Подходит для спальни, гардеробной, прихожей или гостиной"],
+        kz: ["Жеке өлшем", "Мата мен реңктердің кең таңдауы", "Әртүрлі пішін мен дизайн нұсқалары", "Аяқтарын таңдау: пішіні, биіктігі және түсі", "Сіздің референсіңіз бойынша жасауға болады", "Жатын бөлмеге, киім бөлмесіне, кіреберіске немесе қонақ бөлмеге жарайды"],
+        en: ["Made to your measurements", "A wide choice of fabrics and shades", "Different shapes and design options", "Legs to choose: shape, height and colour", "Can be made from your own reference", "Suits a bedroom, dressing room, hallway or living room"],
+        es: ["Medidas a su elección", "Amplia selección de telas y tonos", "Distintas formas y opciones de diseño", "Patas a elegir: forma, altura y color", "Se puede fabricar a partir de su referencia", "Vale para dormitorio, vestidor, recibidor o salón"]
+      },
+      ru: { lead: "Собирается под ваш интерьер",
+            text: "Банкетки KYE ROOM делаются индивидуально: размер, форма, ткань, цвет и высота ножек — на ваш выбор. Банкетку можно взять в одной ткани с кроватью, изголовьем, шторами или декоративными подушками, чтобы всё в комнате читалось единым комплектом." },
+      kz: { lead: "Сіздің интерьеріңізге жиналады",
+            text: "KYE ROOM банкеткалары жеке жасалады: өлшемі, пішіні, матасы, түсі мен аяқтарының биіктігі — таңдауыңыз бойынша. Банкетканы кереуетпен, бас жақпен, шторамен немесе сәндік жастықтармен бір матадан алуға болады, сонда бөлме бір кешен болып көрінеді." },
+      en: { lead: "Built around your room",
+            text: "KYE ROOM benches are made to order: size, shape, fabric, colour and leg height are all yours to choose. A bench can be made in the same cloth as the bed, the headboard, the curtains or the cushions, so the whole room reads as one set." },
+      es: { lead: "Se hace a la medida de su sala",
+            text: "Las banquetas de KYE ROOM se fabrican a medida: tamaño, forma, tela, color y altura de las patas los elige usted. La banqueta puede ir en la misma tela que la cama, el cabecero, las cortinas o los cojines, de modo que toda la habitación se lea como un conjunto." }
+    },
     pouf: {
       name: "POUF", display: { ru: "ПУФЫ", en: "OTTOMANS", kz: "ПУФТАР", es: "PUFS" }, lift: null,
       prices: [["Пуфы и банкетки","80 000 — 150 000"]],
@@ -387,19 +462,19 @@ window.KYE = {
             text: "Ottomans and benches are made from the offcuts of the same European cloth that goes into the beds — which is why a stool is almost never repeated. Velvet, boucle, fringe, wooden and ball feet. Price depends on size, fabric and complexity." }
     },
     pillow: {
-      name: "PILLOW", display: { ru: "ПОДУШКИ И ПОКРЫВАЛА", en: "CUSHIONS AND THROWS", kz: "ЖАСТЫҚ ПЕН КҮНПАРАЖ", es: "COJINES Y COLCHAS" }, lift: null,
-      prices: [["Подушка 45 × 45","15 000"],["Подушка 50 × 50","20 000"],["Подушка 60 × 40","25 000"],["Подушка 90 × 40","30 000"],["Валик","45 000"],["Другой стандартный размер","25 000"],["Покрывало 90 × 200, 120 × 200","150 000"],["Покрывало 140 × 200, 160 × 200","200 000"],["Покрывало 180 × 200, 200 × 200","250 000"]],
-      prices_en: [["Cushion 45 × 45","15 000"],["Cushion 50 × 50","20 000"],["Cushion 60 × 40","25 000"],["Cushion 90 × 40","30 000"],["Bolster","45 000"],["Any other standard size","25 000"],["Throw 90 × 200, 120 × 200","150 000"],["Throw 140 × 200, 160 × 200","200 000"],["Throw 180 × 200, 200 × 200","250 000"]],
-      prices_kz: [["Жастық 45 × 45","15 000"],["Жастық 50 × 50","20 000"],["Жастық 60 × 40","25 000"],["Жастық 90 × 40","30 000"],["Валик","45 000"],["Басқа стандартты өлшем","25 000"],["Күнпараж 90 × 200, 120 × 200","150 000"],["Күнпараж 140 × 200, 160 × 200","200 000"],["Күнпараж 180 × 200, 200 × 200","250 000"]],
-      prices_es: [["Cojín 45 × 45","15 000"],["Cojín 50 × 50","20 000"],["Cojín 60 × 40","25 000"],["Cojín 90 × 40","30 000"],["Rulo","45 000"],["Cualquier otra medida estándar","25 000"],["Colcha 90 × 200, 120 × 200","150 000"],["Colcha 140 × 200, 160 × 200","200 000"],["Colcha 180 × 200, 200 × 200","250 000"]],
+      name: "PILLOW", display: { ru: "ПОДУШКИ", en: "CUSHIONS", kz: "ЖАСТЫҚТАР", es: "COJINES" }, lift: null,
+      prices: [["Подушка 45 × 45","15 000"],["Подушка 50 × 50","20 000"],["Подушка 60 × 40","25 000"],["Подушка 90 × 40","30 000"],["Валик","45 000"],["Другой стандартный размер","25 000"]],
+      prices_en: [["Cushion 45 × 45","15 000"],["Cushion 50 × 50","20 000"],["Cushion 60 × 40","25 000"],["Cushion 90 × 40","30 000"],["Bolster","45 000"],["Any other standard size","25 000"]],
+      prices_kz: [["Жастық 45 × 45","15 000"],["Жастық 50 × 50","20 000"],["Жастық 60 × 40","25 000"],["Жастық 90 × 40","30 000"],["Валик","45 000"],["Басқа стандартты өлшем","25 000"]],
+      prices_es: [["Cojín 45 × 45","15 000"],["Cojín 50 × 50","20 000"],["Cojín 60 × 40","25 000"],["Cojín 90 × 40","30 000"],["Rulo","45 000"],["Cualquier otra medida estándar","25 000"]],
       kz: { lead: "Соңғы қабат",
-            text: "Нақты кереуетке арналған сәндік жастықтар, валиктер мен күнпараждар: бедерін, тығыздығы мен пішінін бас жақпен таласпай, оны жалғастыратындай етіп таңдаймыз. Монограмма, кант, шашақ, дөңгелек ұштар — таңдауыңыз бойынша." },
+            text: "Нақты кереуетке арналған сәндік жастықтар мен валиктер: бедерін, тығыздығы мен пішінін бас жақпен таласпай, оны жалғастыратындай етіп таңдаймыз. Монограмма, кант, шашақ, дөңгелек ұштар — таңдауыңыз бойынша." },
       es: { lead: "La última capa",
-            text: "Cojines, rulos y colchas decorativos hechos para una cama concreta: elegimos el dibujo, la densidad y la forma para que continúen el cabecero en lugar de discutir con él. Monograma, ribete, flecos, remates redondos: usted decide." },
+            text: "Cojines y rulos decorativos hechos para una cama concreta: elegimos el dibujo, la densidad y la forma para que continúen el cabecero en lugar de discutir con él. Monograma, ribete, flecos, remates redondos: usted decide." },
       ru: { lead: "Последний слой",
-            text: "Декоративные подушки, валики и покрывала под конкретную кровать: подбираем рисунок, плотность и форму так, чтобы они не спорили с изголовьем, а продолжали его. Монограмма, кант, бахрома, круглые торцы — по вашему выбору." },
+            text: "Декоративные подушки и валики под конкретную кровать: подбираем рисунок, плотность и форму так, чтобы они не спорили с изголовьем, а продолжали его. Монограмма, кант, бахрома, круглые торцы — по вашему выбору." },
       en: { lead: "The final layer",
-            text: "Decorative cushions, bolsters and throws made for a specific bed: we choose the pattern, the density and the shape so that they continue the headboard rather than argue with it. Monogram, piping, fringe, round end caps — your call." }
+            text: "Decorative cushions and bolsters made for a specific bed: we choose the pattern, the density and the shape so that they continue the headboard rather than argue with it. Monogram, piping, fringe, round end caps — your call." }
     }
   },
 
@@ -607,6 +682,16 @@ window.KYE = {
       en:{ variant:"Pink stripe", note:"Daybed with shaped sides",
            scene:"A cherry orchard in bloom, where the pink is in the cloth and in the air alike." } },
 
+    { id:"headboard", model:"headboard",
+      ru:{ variant:"15 силуэтов", note:"На стену или к готовому основанию",
+           scene:"Ряд изголовий в разных тканях: форма одна, характер каждый раз другой." },
+      kz:{ variant:"15 силуэт", note:"Қабырғаға немесе дайын негізге",
+           scene:"Әртүрлі матадағы бас жақтар қатары: пішіні бір, мінезі әр жолы басқа." },
+      en:{ variant:"15 shapes", note:"Wall-mounted or fixed to a base",
+           scene:"A row of headboards in different cloths: one form, a different character each time." },
+      es:{ variant:"15 formas", note:"A pared o sobre una base",
+           scene:"Una fila de cabeceros en telas distintas: una forma, un carácter diferente cada vez." } },
+
     { id:"pouf-set", model:"pouf",
       es:{ variant:"La colección", note:"Terciopelo, bouclé, flecos",
            scene:"Una ladera de hierba a la hora dorada: los pufs se alzan como rocas y las sombras se alargan a la derecha." },
@@ -617,15 +702,16 @@ window.KYE = {
       en:{ variant:"The set", note:"Velvet, boucle, fringe",
            scene:"A grassy slope at golden hour: the stools stand like boulders, shadows raking right." } },
 
-    { id:"pouf-poppy", model:"pouf",
-      es:{ variant:"Amapola", note:"Bouclé rojo, patas de bola",
-           scene:"Un campo de amapolas: un mismo color en dos texturas, un teleobjetivo separa el puf del fondo." },
-      kz:{ variant:"Көкнәр", note:"Қызыл букле, шар аяқтар",
-           scene:"Көкнәр даласы: екі фактурадағы бір түс, ұзын фокус пуфты фоннан бөліп тұр." },
-      ru:{ variant:"Маковый", note:"Красное букле, шаровые опоры",
-           scene:"Маковое поле: один цвет в двух фактурах, длинный фокус отделяет пуф от фона." },
-      en:{ variant:"Poppy", note:"Red boucle, ball feet",
-           scene:"A poppy field: one colour in two textures, a long lens separating stool from ground." } },
+    { id:"banquette", model:"banquette",
+      ru:{ variant:"Пудровый бархат", note:"Размер, форма и ножки на выбор",
+           scene:"Банкетка в изножье кровати, в тон изголовью и шторам." },
+      kz:{ variant:"Опа түсті барқыт", note:"Өлшемі, пішіні және аяқтары таңдау бойынша",
+           scene:"Кереуеттің аяқ жағындағы банкетка, бас жақ пен штора үндес." },
+      en:{ variant:"Blush velvet", note:"Size, shape and legs to choose",
+           scene:"A bench at the foot of the bed, matched to the headboard and the curtains." },
+      es:{ variant:"Terciopelo empolvado", note:"Tamaño, forma y patas a elegir",
+           scene:"Una banqueta a los pies de la cama, a juego con el cabecero y las cortinas." } },
+
 
     { id:"pillow", model:"pillow",
       es:{ variant:"Terracota", note:"Rulos con flecos y ribete",
@@ -635,6 +721,16 @@ window.KYE = {
       ru:{ variant:"Терракота", note:"Валики с бахромой и кантом",
            scene:"Лиственничный лес поздней осенью — ржавая хвоя повторяет цвет тканей." },
       en:{ variant:"Terracotta", note:"Bolsters with fringe and piping",
-           scene:"A larch forest in late autumn — rust needles echo the colour of the cloth." } }
+           scene:"A larch forest in late autumn — rust needles echo the colour of the cloth." } },
+
+    { id:"throw", model:"throw",
+      ru:{ variant:"Лён", note:"Шьётся под размер вашей кровати",
+           scene:"Покрывало и кровать в одной ткани — комната собирается сама." },
+      kz:{ variant:"Зығыр", note:"Кереуетіңіздің өлшеміне тігіледі",
+           scene:"Күнпараж бен кереует бір матада — бөлме өздігінен жиналады." },
+      en:{ variant:"Linen", note:"Made to the size of your bed",
+           scene:"Throw and bed in one cloth — the room composes itself." },
+      es:{ variant:"Lino", note:"Hecha a la medida de su cama",
+           scene:"Colcha y cama en una misma tela: la habitación se compone sola." } }
   ]
 };

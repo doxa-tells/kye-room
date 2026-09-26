@@ -185,9 +185,7 @@ window.KYE_MEDIA = {
   "nature": [
    "media/nature/king.webp"
   ],
-  "room": [
-   "media/room/king-1.webp"
-  ]
+  "room": []
  },
  "pink": {
   "model": "pink",
@@ -199,6 +197,28 @@ window.KYE_MEDIA = {
    "media/room/pink-1.webp"
   ]
  },
+ "headboard": {
+  "model": "headboard",
+  "tile": "media/tile/headboard.webp",
+  "nature": [
+   "media/headboards/hb-01.webp",
+   "media/headboards/hb-02.webp",
+   "media/headboards/hb-03.webp",
+   "media/headboards/hb-04.webp",
+   "media/headboards/hb-05.webp",
+   "media/headboards/hb-06.webp",
+   "media/headboards/hb-07.webp",
+   "media/headboards/hb-08.webp",
+   "media/headboards/hb-09.webp",
+   "media/headboards/hb-10.webp",
+   "media/headboards/hb-11.webp",
+   "media/headboards/hb-12.webp",
+   "media/headboards/hb-13.webp",
+   "media/headboards/hb-14.webp",
+   "media/headboards/hb-15.webp"
+  ],
+  "room": []
+ },
  "pouf-set": {
   "model": "pouf",
   "tile": "media/tile/pouf-set.webp",
@@ -209,15 +229,13 @@ window.KYE_MEDIA = {
    "media/room/pouf-set-1.webp"
   ]
  },
- "pouf-poppy": {
-  "model": "pouf",
-  "tile": "media/tile/pouf-poppy.webp",
+ "banquette": {
+  "model": "banquette",
+  "tile": "media/tile/banquette.webp",
   "nature": [
-   "media/nature/pouf-poppy.webp"
+   "media/nature/banquette.webp"
   ],
-  "room": [
-   "media/room/pouf-poppy-1.webp"
-  ]
+  "room": []
  },
  "pillow": {
   "model": "pillow",
@@ -228,5 +246,13 @@ window.KYE_MEDIA = {
   "room": [
    "media/room/pillow-1.webp"
   ]
+ },
+ "throw": {
+  "model": "throw",
+  "tile": "media/tile/throw.webp",
+  "nature": [
+   "media/nature/throw.webp"
+  ],
+  "room": []
  }
 };

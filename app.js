@@ -323,6 +323,10 @@
       }
     }
     $$(".arrows").forEach(function (a) { a.style.visibility = L.length > 1 ? "visible" : "hidden"; });
+    /* переключатель режимов нужен, только если у позиции есть оба набора:
+       у изголовий, покрывал и банкеток интерьерной серии нет */
+    var both = (M[open_].nature || []).length && (M[open_].room || []).length;
+    modesBox.style.display = both ? "" : "none";
     $$("button", modesBox).forEach(function (b) { b.classList.toggle("on", b.dataset.mode === mode); });
   }
 
@@ -368,6 +372,8 @@
       var val = (p[1].indexOf("₸") > -1) ? p[1] : p[1] + " ₸";
       b1i.appendChild(el("div", "prow", "<span>" + p[0] + "</span><b>" + val + "</b>"));
     });
+    var pnote = m.price_note && m.price_note[lang];
+    if (pnote) b1i.appendChild(el("p", "note", pnote));
     b1.appendChild(b1i); a1.appendChild(b1);
     panel.appendChild(a1);
 
@@ -375,7 +381,9 @@
        К пуфам и подушкам (lift === null) ничего из этого не относится —
        тогда блок просто не показываем, пустой аккордеон хуже, чем никакого. */
     var det = [];
-    if (m.lift !== null) {
+    var own = m.specs && m.specs[lang];
+    if (own && own.length) det = own.slice();
+    else if (m.lift !== null) {
       det.push(t("fabric_price"));
       if (m.lift === true) det.push(t("lift_yes"));
       if (m.lift === false) det.push(t("lift_no"));
